@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Science of Dune — Discussion Club</title>
+  <meta name="description" content="A film and science discussion club exploring the world of Dune — from sandworms to spice, from prophecy to politics." />
+  <meta property="og:title" content="The Science of Dune — Discussion Club" />
+  <meta property="og:description" content="Explore Arrakis through science, politics, and cinema. 10 sessions. No prior reading required for Season 1." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #08060400;
+      --bg-solid:    #080604;
+      --card:        #110e09;
+      --card-hover:  #181310;
+      --gold:        #c8a22a;
+      --gold-light:  #e6c95c;
+      --gold-dim:    rgba(200, 162, 42, 0.35);
+      --gold-glow:   rgba(200, 162, 42, 0.12);
+      --sand:        #d4b080;
+      --text:        #f0e6d0;
+      --text-muted:  #9a8870;
+      --border:      rgba(200, 162, 42, 0.22);
+      --border-hover:rgba(200, 162, 42, 0.55);
+      --r:           6px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-solid);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── Scrollbar ────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg-solid); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 4px; }
+
+    /* ── Nav ──────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1rem, 4vw, 3rem);
+      height: 58px;
+      background: rgba(8,6,4,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold-light); }
+
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-burger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--gold);
+      transition: 0.3s;
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .nav-burger { display: flex; }
+
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 58px; left: 0; right: 0;
+        background: rgba(8,6,4,0.97);
+        border-bottom: 1px solid var(--border);
+        padding: 1.5rem 2rem;
+        gap: 1.4rem;
+        z-index: 99;
+      }
+    }
+
+    /* ── Hero ─────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      overflow: hidden;
+    }
+
+    #sandCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .dune-silhouette {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.6rem;
+      opacity: 0.85;
+      animation: fadeUp 1s ease both;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.4rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      background: linear-gradient(160deg, var(--gold-light) 0%, var(--gold) 45%, #a07818 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      animation: fadeUp 1s 0.15s ease both;
+    }
+
+    .hero-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.9rem, 2.5vw, 1.25rem);
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--sand);
+      margin-bottom: 2.4rem;
+      animation: fadeUp 1s 0.3s ease both;
+    }
+
+    .hero-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2.2vw, 1.3rem);
+      color: var(--text-muted);
+      max-width: 540px;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+      animation: fadeUp 1s 0.45s ease both;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 2rem;
+      border: 1px solid var(--gold-dim);
+      border-radius: var(--r);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: all 0.25s;
+      animation: fadeUp 1s 0.6s ease both;
+    }
+    .hero-cta:hover {
+      background: var(--gold-glow);
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Section Shell ────────────────────────────────────── */
+    section { padding: clamp(4rem, 8vw, 7rem) clamp(1.2rem, 5vw, 3rem); }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+      color: var(--text-muted);
+      line-height: 1.9;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ── About ────────────────────────────────────────────── */
+    #about {
+      background: linear-gradient(180deg, var(--bg-solid) 0%, #0d0b07 100%);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .book-card {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 2rem;
+      background: var(--card);
+      overflow: hidden;
+    }
+    .book-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .book-card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .chapter-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .chapter-list li {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.97rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      line-height: 1.5;
+    }
+    .chapter-list li::before {
+      content: '◆';
+      color: var(--gold);
+      font-size: 0.45rem;
+      flex-shrink: 0;
+      position: relative;
+      top: -2px;
+    }
+
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Sessions ─────────────────────────────────────────── */
+    #sessions { background: #0a0804; }
+
+    .season-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--bg-solid);
+      background: var(--gold);
+      padding: 0.3rem 0.9rem;
+      border-radius: 2px;
+      margin-bottom: 2.2rem;
+      font-weight: 700;
+    }
+
+    .sessions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .session-card {
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      background: var(--card);
+      overflow: hidden;
+      transition: border-color 0.25s;
+    }
+    .session-card:hover { border-color: var(--border-hover); }
+    .session-card.open  { border-color: var(--gold-dim); }
+
+    .session-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 1.4rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .session-header:hover { background: var(--card-hover); }
+
+    .session-num {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold);
+      min-width: 2.4rem;
+      letter-spacing: 0.05em;
+    }
+
+    .session-info { flex: 1; }
+
+    .session-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.85rem, 1.8vw, 1rem);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .session-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    .session-arrow {
+      color: var(--gold-dim);
+      font-size: 0.7rem;
+      transition: transform 0.3s, color 0.2s;
+      flex-shrink: 0;
+    }
+    .session-card.open .session-arrow {
+      transform: rotate(180deg);
+      color: var(--gold);
+    }
+
+    .session-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1);
+    }
+    .session-card.open .session-body {
+      max-height: 1000px;
+    }
+
+    .session-body-inner {
+      padding: 0 1.4rem 1.4rem 4.4rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.2rem;
+    }
+
+    .questions-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .questions-list li {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.95rem, 1.6vw, 1.08rem);
+      color: var(--text);
+      line-height: 1.65;
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .questions-list li .q-num {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      color: var(--gold);
+      min-width: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+
+    .q-badge {
+      display: inline-block;
+      padding: 0.12rem 0.55rem;
+      border-radius: 2px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-right: 0.4rem;
+      vertical-align: middle;
+    }
+    .q-badge.hot  { background: rgba(200,80,30,0.2); color: #e07040; border: 1px solid rgba(200,80,30,0.3); }
+    .q-badge.fun  { background: rgba(80,160,100,0.15); color: #60b878; border: 1px solid rgba(80,160,100,0.25); }
+    .q-badge.debate { background: rgba(200,162,42,0.15); color: var(--gold); border: 1px solid var(--gold-dim); }
+
+    @media (max-width: 500px) {
+      .session-body-inner { padding-left: 1.4rem; }
+    }
+
+    /* ── Spice Interlude ──────────────────────────────────── */
+    .spice-break {
+      position: relative;
+      padding: clamp(3rem,6vw,5rem) clamp(1.2rem,5vw,3rem);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .spice-break::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(200,162,42,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .spice-break-line {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 2rem;
+    }
+
+    .spice-break-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
+      color: var(--sand);
+      max-width: 620px;
+      margin: 0 auto 0.5rem;
+      line-height: 1.7;
+    }
+
+    .spice-break-attr {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* ── Stats strip ──────────────────────────────────────── */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin: 3rem 0 0;
+    }
+
+    .stat-item {
+      background: var(--card);
+      padding: 1.6rem 1.2rem;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Film Section ─────────────────────────────────────── */
+    #films { background: #0d0b07; }
+
+    .films-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .film-card {
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      background: var(--card);
+      padding: 1.5rem;
+      transition: border-color 0.25s, background 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .film-card:hover {
+      border-color: var(--border-hover);
+      background: var(--card-hover);
+    }
+    .film-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .film-card:hover::after { opacity: 1; }
+
+    .film-year {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .film-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+    }
+
+    .film-director {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 0.8rem;
+    }
+
+    .film-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .film-tag {
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Science Section ──────────────────────────────────── */
+    #science { background: var(--bg-solid); }
+
+    .science-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .science-card {
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      background: var(--card);
+      padding: 1.4rem;
+      transition: all 0.25s;
+    }
+    .science-card:hover {
+      border-color: var(--border-hover);
+      background: var(--card-hover);
+    }
+
+    .science-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .science-topic {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+    }
+
+    .science-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── Footer ───────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem clamp(1.2rem, 5vw, 3rem);
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .footer-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.7;
+    }
+
+    .footer-copy {
+      font-size: 0.72rem;
+      color: #443c32;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── Grain overlay ────────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 200;
+      opacity: 0.5;
+    }
+
+    /* ── Utility ──────────────────────────────────────────── */
+    .gold { color: var(--gold); }
+    .italic { font-style: italic; }
+    .mt-1 { margin-top: 1rem; }
+    .mt-2 { margin-top: 2rem; }
+    .mt-3 { margin-top: 3rem; }
+
+    /* ── Scroll reveal ────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       NEW DUNE DESIGN ELEMENTS
+    ══════════════════════════════════════════════════════ */
+
+    /* ── Hero Sun Orb ────────────────────────────────────── */
+    .hero-sun {
+      position: absolute;
+      width: min(560px, 90vw);
+      height: min(560px, 90vw);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -54%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-sun::before {
+      content: '';
+      position: absolute;
+      inset: 18%;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(210, 120, 20, 0.11) 0%,
+        rgba(200, 140, 40, 0.06) 45%,
+        transparent 70%);
+    }
+    .hero-sun::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 162, 42, 0.09);
+      box-shadow:
+        0 0 100px rgba(190, 100, 15, 0.07),
+        0 0 220px rgba(180, 90, 10, 0.04),
+        inset 0 0 100px rgba(200, 130, 25, 0.05);
+    }
+    /* Second inner ring */
+    .hero-sun-inner {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 58%; height: 58%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid rgba(200, 162, 42, 0.07);
+      pointer-events: none;
+    }
+
+    /* ── Hero Reticle (MELANGE-style) ────────────────────── */
+    .hero-reticle {
+      position: absolute;
+      width: clamp(130px, 16vw, 210px);
+      height: clamp(130px, 16vw, 210px);
+      top: 50%;
+      right: clamp(2%, 5vw, 9%);
+      transform: translateY(-60%);
+      pointer-events: none;
+      color: var(--gold);
+      opacity: 0.11;
+      animation: reticle-drift 80s linear infinite;
+      z-index: 1;
+    }
+    .hero-reticle-left {
+      position: absolute;
+      width: clamp(70px, 8vw, 110px);
+      height: clamp(70px, 8vw, 110px);
+      bottom: 22%;
+      left: clamp(2%, 5vw, 8%);
+      pointer-events: none;
+      color: var(--gold);
+      opacity: 0.07;
+      animation: reticle-spin-left 120s linear infinite;
+      z-index: 1;
+    }
+    @keyframes reticle-drift {
+      from { transform: translateY(-60%) rotate(0deg); }
+      to   { transform: translateY(-60%) rotate(360deg); }
+    }
+    @keyframes reticle-spin-left {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(-360deg); }
+    }
+
+    /* ── Cross / Plus markers ────────────────────────────── */
+    .x-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 12px;
+      height: 12px;
+      position: relative;
+      flex-shrink: 0;
+      opacity: 0.45;
+    }
+    .x-mark::before, .x-mark::after {
+      content: '';
+      position: absolute;
+      background: var(--gold);
+    }
+    .x-mark::before { width: 1px; height: 100%; left: 50%; transform: translateX(-50%); }
+    .x-mark::after  { height: 1px; width: 100%; top: 50%; transform: translateY(-50%); }
+
+    /* Inline text cross */
+    .cross-inline {
+      display: inline-block;
+      font-size: 0.55rem;
+      color: var(--gold);
+      opacity: 0.4;
+      letter-spacing: 0;
+      margin: 0 0.5rem;
+      vertical-align: middle;
+      font-weight: 400;
+    }
+
+    /* ── Corner brackets on cards ────────────────────────── */
+    .bracket-card {
+      position: relative;
+    }
+    .bracket-card::before, .bracket-card::after {
+      content: '';
+      position: absolute;
+      width: 13px; height: 13px;
+      border-color: var(--gold-dim);
+      border-style: solid;
+      pointer-events: none;
+      z-index: 2;
+      transition: border-color 0.25s;
+    }
+    .bracket-card::before { top: 5px;  left: 5px;  border-width: 1px 0 0 1px; }
+    .bracket-card::after  { bottom: 5px; right: 5px; border-width: 0 1px 1px 0; }
+    .bracket-card:hover::before,
+    .bracket-card:hover::after { border-color: rgba(200,162,42,0.5); }
+
+    /* ── Coordinate bar ──────────────────────────────────── */
+    .coord-bar {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-top: 2.8rem;
+      justify-content: center;
+      animation: fadeUp 1s 0.8s ease both;
+      flex-wrap: wrap;
+    }
+    .coord-item {
+      font-family: 'Cinzel', serif;
+      font-size: 0.57rem;
+      letter-spacing: 0.22em;
+      color: rgba(200, 162, 42, 0.28);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .coord-dot {
+      width: 2px; height: 2px;
+      border-radius: 50%;
+      background: rgba(200,162,42,0.25);
+      flex-shrink: 0;
+    }
+
+    /* ── Deco divider with symbol ────────────────────────── */
+    .deco-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 2.8rem 0;
+    }
+    .deco-divider::before, .deco-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .deco-divider-sym {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      color: rgba(200,162,42,0.45);
+      letter-spacing: 0.35em;
+      white-space: nowrap;
+    }
+
+    /* ── Spice eye decoration ────────────────────────────── */
+    .spice-eye {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .spice-eye-line {
+      width: 40px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim));
+    }
+    .spice-eye-line.right {
+      background: linear-gradient(90deg, var(--gold-dim), transparent);
+    }
+    .spice-eye-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      border: 1px solid var(--gold);
+      opacity: 0.5;
+      position: relative;
+    }
+    .spice-eye-dot::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    /* ── Section eyebrow trailing mark ──────────────────── */
+    .section-eyebrow::after {
+      content: '+';
+      font-size: 0.75rem;
+      color: var(--gold);
+      opacity: 0.35;
+      margin-left: 0.3rem;
+      letter-spacing: 0;
+      font-weight: 400;
+    }
+
+    /* ── Stipple texture on quote breaks ─────────────────── */
+    .spice-break {
+      position: relative;
+    }
+    .spice-break-stipple {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: radial-gradient(circle, var(--gold) 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+
+    /* ── Stat item gold accent line ──────────────────────── */
+    .stat-item:not(:last-child) {
+      border-right: 1px solid var(--border);
+    }
+
+    /* ── Nav logo with glyph ──────────────────────────────── */
+    .nav-glyph {
+      color: var(--gold);
+      opacity: 0.5;
+      font-size: 0.7rem;
+      margin-right: 0.4rem;
+    }
+
+    /* ── Film card year accent ───────────────────────────── */
+    .film-card .film-year::before {
+      content: '◆ ';
+      font-size: 0.4rem;
+      vertical-align: middle;
+      opacity: 0.6;
+    }
+
+    /* ── Science card icon ring ──────────────────────────── */
+    .science-icon-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      margin-bottom: 0.9rem;
+      font-size: 1.2rem;
+      position: relative;
+    }
+    .science-icon-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid rgba(200,162,42,0.08);
+    }
+
+    @media (max-width: 500px) {
+      .hero-reticle { display: none; }
+      .hero-reticle-left { display: none; }
+      .coord-bar { gap: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NAV
+═════════════════════════════════════════════════════════════ -->
+<nav id="navbar">
+  <a href="#" class="nav-logo"><span class="nav-glyph">◆</span>Dune Club</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#sessions">Sessions</a></li>
+    <li><a href="#films">Adaptations</a></li>
+    <li><a href="#science">The Science</a></li>
+  </ul>
+  <div class="nav-burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO
+═════════════════════════════════════════════════════════════ -->
+<section class="hero" id="home">
+  <canvas id="sandCanvas"></canvas>
+
+  <!-- Sun orb behind content -->
+  <div class="hero-sun"><div class="hero-sun-inner"></div></div>
+
+  <!-- Reticle right (MELANGE-style) -->
+  <svg class="hero-reticle" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor">
+    <circle cx="100" cy="100" r="94" stroke-width="0.5"/>
+    <circle cx="100" cy="100" r="72" stroke-width="0.5"/>
+    <circle cx="100" cy="100" r="50" stroke-width="0.5"/>
+    <circle cx="100" cy="100" r="28" stroke-width="1"/>
+    <circle cx="100" cy="100" r="7"  stroke-width="1"/>
+    <circle cx="100" cy="100" r="2"  fill="currentColor" stroke="none"/>
+    <!-- 4 main crosshair lines -->
+    <line x1="100" y1="4"   x2="100" y2="22"  stroke-width="0.75"/>
+    <line x1="100" y1="178" x2="100" y2="196" stroke-width="0.75"/>
+    <line x1="4"   y1="100" x2="22"  y2="100" stroke-width="0.75"/>
+    <line x1="178" y1="100" x2="196" y2="100" stroke-width="0.75"/>
+    <!-- 8 minor tick marks (45° intervals) -->
+    <line x1="100" y1="4"   x2="100" y2="14"  stroke-width="0.4" transform="rotate(45  100 100)"/>
+    <line x1="100" y1="4"   x2="100" y2="14"  stroke-width="0.4" transform="rotate(90  100 100)"/>
+    <line x1="100" y1="4"   x2="100" y2="14"  stroke-width="0.4" transform="rotate(135 100 100)"/>
+    <line x1="100" y1="4"   x2="100" y2="14"  stroke-width="0.4" transform="rotate(180 100 100)"/>
+    <line x1="100" y1="4"   x2="100" y2="14"  stroke-width="0.4" transform="rotate(225 100 100)"/>
+    <line x1="100" y1="4"   x2="100" y2="14"  stroke-width="0.4" transform="rotate(270 100 100)"/>
+    <line x1="100" y1="4"   x2="100" y2="14"  stroke-width="0.4" transform="rotate(315 100 100)"/>
+    <!-- Outer tick ring at every 30° -->
+    <line x1="100" y1="6" x2="100" y2="11" stroke-width="0.3" transform="rotate(30  100 100)"/>
+    <line x1="100" y1="6" x2="100" y2="11" stroke-width="0.3" transform="rotate(60  100 100)"/>
+    <line x1="100" y1="6" x2="100" y2="11" stroke-width="0.3" transform="rotate(120 100 100)"/>
+    <line x1="100" y1="6" x2="100" y2="11" stroke-width="0.3" transform="rotate(150 100 100)"/>
+    <line x1="100" y1="6" x2="100" y2="11" stroke-width="0.3" transform="rotate(210 100 100)"/>
+    <line x1="100" y1="6" x2="100" y2="11" stroke-width="0.3" transform="rotate(240 100 100)"/>
+    <line x1="100" y1="6" x2="100" y2="11" stroke-width="0.3" transform="rotate(300 100 100)"/>
+    <line x1="100" y1="6" x2="100" y2="11" stroke-width="0.3" transform="rotate(330 100 100)"/>
+    <!-- Corner marks at 45° -->
+    <path d="M148,56 L156,56 L156,64" stroke-width="0.8" fill="none"/>
+    <path d="M52,56 L44,56 L44,64"   stroke-width="0.8" fill="none"/>
+    <path d="M148,144 L156,144 L156,136" stroke-width="0.8" fill="none"/>
+    <path d="M52,144 L44,144 L44,136"   stroke-width="0.8" fill="none"/>
+  </svg>
+
+  <!-- Small reticle bottom-left -->
+  <svg class="hero-reticle-left" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor">
+    <circle cx="100" cy="100" r="90" stroke-width="0.5"/>
+    <circle cx="100" cy="100" r="55" stroke-width="0.5"/>
+    <circle cx="100" cy="100" r="20" stroke-width="1"/>
+    <circle cx="100" cy="100" r="4"  fill="currentColor" stroke="none"/>
+    <line x1="100" y1="8"   x2="100" y2="30"  stroke-width="0.75"/>
+    <line x1="100" y1="170" x2="100" y2="192" stroke-width="0.75"/>
+    <line x1="8"   y1="100" x2="30"  y2="100" stroke-width="0.75"/>
+    <line x1="170" y1="100" x2="192" y2="100" stroke-width="0.75"/>
+  </svg>
+
+  <!-- Content -->
+  <div style="position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; text-align:center;">
+    <p class="hero-tag">Season I &nbsp;<span class="cross-inline">+</span>&nbsp; The World of Arrakis</p>
+    <h1 class="hero-title">The Science<br>of Dune</h1>
+    <p class="hero-subtitle">Discussion Club</p>
+    <p class="hero-quote">"The mystery of life isn't a problem to solve,<br>but a reality to experience."</p>
+    <a href="#sessions" class="hero-cta">
+      Explore Sessions
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+    </a>
+    <!-- Coordinate bar -->
+    <div class="coord-bar">
+      <span class="coord-item">Arrakis · Canopus System</span>
+      <span class="coord-dot"></span>
+      <span class="coord-item">23.7°N · 108.4°E</span>
+      <span class="coord-dot"></span>
+      <span class="coord-item">The Deep Desert</span>
+    </div>
+  </div>
+
+  <!-- Dune silhouette with lone figure -->
+  <svg class="dune-silhouette" viewBox="0 0 1440 180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,180 L0,130 Q180,45 360,108 Q540,170 720,88 Q900,8 1080,78 Q1260,148 1440,98 L1440,180 Z" fill="#0a0804" opacity="0.9"/>
+    <path d="M0,180 L0,152 Q200,88 400,138 Q600,172 800,122 Q1000,72 1200,128 Q1350,162 1440,140 L1440,180 Z" fill="#080604"/>
+    <!-- Lone Fremen figure at dune crest ~720,88 -->
+    <g transform="translate(714, 75)" fill="#c8a22a" opacity="0.45">
+      <!-- Body silhouette (hooded figure, ~9px tall) -->
+      <ellipse cx="3" cy="1.5" rx="1.8" ry="1.8"/><!-- head -->
+      <path d="M1,3.5 Q-1,9 0,12 L3,11.5 L6,12 Q7,9 5,3.5 Q3,5 1,3.5 Z"/><!-- robe -->
+      <line x1="3" y1="12" x2="3" y2="12" stroke="#c8a22a" stroke-width="0.5"/>
+    </g>
+    <!-- Small cross marks on dune ridge -->
+    <text x="850" y="72" font-family="serif" font-size="6" fill="#c8a22a" opacity="0.2" text-anchor="middle">+</text>
+    <text x="580" y="98" font-family="serif" font-size="5" fill="#c8a22a" opacity="0.15" text-anchor="middle">+</text>
+  </svg>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     ABOUT
+═════════════════════════════════════════════════════════════ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal">
+        <p class="section-eyebrow">About</p>
+        <h2 class="section-title">What is this club?</h2>
+        <div class="section-body">
+          <p>A discussion club that explores the universe of <em>Dune</em> — through film, science, philosophy, and politics. No prior reading required for Season 1. Just curiosity.</p>
+          <p class="mt-1">We meet session by session, each with a central question and a set of discussion prompts. Season 1 is built around the Villeneuve films. Season 2 dives deeper — into the real science behind the world Frank Herbert imagined.</p>
+          <p class="mt-1">We use <em>The Science of Dune</em> — a collection of essays by scientists — as our guide to the real physics, biology, and ecology hiding inside Arrakis.</p>
+        </div>
+
+        <div class="stats-strip mt-3">
+          <div class="stat-item">
+            <div class="stat-num">10</div>
+            <div class="stat-label">Sessions</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">2</div>
+            <div class="stat-label">Seasons</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">60+</div>
+            <div class="stat-label">Questions</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" style="transition-delay:0.15s">
+        <div class="book-card bracket-card">
+          <p class="book-card-title">The Science of Dune — Contents</p>
+          <ul class="chapter-list">
+            <li>Introduction · Kevin R. Grazier, Ph.D.</li>
+            <li>Melange · Carol Hart, Ph.D.</li>
+            <li>My Second Sight · Sergio Pistoi, Ph.D.</li>
+            <li>The Biology of the Sandworm · Sibylle Hechtel, Ph.D.</li>
+            <li>The Dunes of Dune · Ralph D. Lorenz, Ph.D.</li>
+            <li>From Silver Fox to Kwisatz Haderach · Carol Hart, Ph.D.</li>
+            <li>Evolution by Any Means on Dune · Sandy Field, Ph.D.</li>
+            <li>The Anthropology of Dune · Sharlotte Neely, Ph.D.</li>
+            <li>The Real Stars of Dune · Kevin R. Grazier, Ph.D.</li>
+            <li>Prescience and Prophecy · Csilla Csori</li>
+            <li>Stillsuit · John C. Smith</li>
+            <li>The Black Hole of Pain · Carol Hart, Ph.D.</li>
+            <li>Navigators and the Spacing Guild · John C. Smith</li>
+            <li>Memory (and the Tleilaxu) Makes the Man · Csilla Csori</li>
+            <li>Cosmic Origami · Kevin R. Grazier, Ph.D.</li>
+            <li>Suspensor of Disbelief · Ges Seger &amp; Kevin R. Grazier</li>
+            <li>The Shade of Uliet · David M. Lawrence</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     QUOTE BREAK
+═════════════════════════════════════════════════════════════ -->
+<div class="spice-break">
+  <div class="spice-break-stipple"></div>
+  <div class="spice-eye">
+    <div class="spice-eye-line"></div>
+    <div class="spice-eye-dot"></div>
+    <div class="spice-eye-line right"></div>
+  </div>
+  <p class="spice-break-text">"He who controls the spice controls the universe."</p>
+  <p class="spice-break-attr">— Baron Vladimir Harkonnen</p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SESSIONS
+═════════════════════════════════════════════════════════════ -->
+<section id="sessions">
+  <div class="container">
+    <p class="section-eyebrow">Programme</p>
+    <h2 class="section-title">Discussion Sessions</h2>
+    <p class="section-body" style="margin-bottom:2.5rem">Each session opens with a central provocation, then unpacks it through a mix of film analysis, real-world parallels, and pure speculation. No homework required for Season 1.</p>
+
+    <!-- SEASON 1 -->
+    <div class="season-label">Season I &nbsp;·&nbsp; The World</div>
+
+    <div class="sessions-grid">
+
+      <!-- S1 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">01</span>
+          <div class="session-info">
+            <p class="session-title">First Impressions &amp; The Vibe</p>
+            <p class="session-tagline">"Why does Dune feel so different from other sci-fi?"</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> What was your first reaction to Dune (movie, book, or both)? Did you get it immediately or did it take time to click?</li>
+              <li><span class="q-num">2.</span> Why does Dune feel so serious and heavy compared to Marvel or Star Wars? Is that good or bad?</li>
+              <li><span class="q-num">3.</span> The movie has almost no jokes. Did that bother you or did it feel right?</li>
+              <li><span class="q-num">4.</span> If someone asked you "what is Dune about?" in one sentence — what would you say?</li>
+              <li><span class="q-num">5.</span> <span class="q-badge hot">Hot Take</span> "Dune is just Lawrence of Arabia with sandworms." Agree or disagree?</li>
+              <li><span class="q-num">6.</span> Hans Zimmer's score uses entirely new instruments. Does music shape how "alien" a world feels?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S2 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">02</span>
+          <div class="session-info">
+            <p class="session-title">Paul Atreides — Hero or Warning?</p>
+            <p class="session-tagline">"Is Paul actually the good guy?"</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> Do you root for Paul in the films? When did that feeling change, if ever?</li>
+              <li><span class="q-num">2.</span> Paul knows the future but keeps making the same choices anyway. Is that brave or stupid?</li>
+              <li><span class="q-num">3.</span> "The chosen one" — Dune is supposedly a deconstruction of this trope. Did the movies actually succeed at making Paul feel dangerous rather than cool?</li>
+              <li><span class="q-num">4.</span> Compare Paul to other "chosen ones" — Harry Potter, Neo, Frodo. What's different?</li>
+              <li><span class="q-num">5.</span> <span class="q-badge debate">Debate</span> Is Paul Atreides a hero, a villain, or a victim?</li>
+              <li><span class="q-num">6.</span> Timothée Chalamet plays Paul as fragile, almost reluctant. Does casting shape how we judge a character morally?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S3 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">03</span>
+          <div class="session-info">
+            <p class="session-title">Spice, Oil &amp; Real World Politics</p>
+            <p class="session-tagline">"Dune is basically about oil. Let's talk about that."</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> Herbert wrote Dune in the 1960s partly inspired by Middle Eastern oil politics. What parallels do you see today?</li>
+              <li><span class="q-num">2.</span> The Fremen have been living in the desert forever — then outsiders arrive and say "we need what's under your sand." Does that story sound familiar?</li>
+              <li><span class="q-num">3.</span> Is Dune anti-imperialist, or does it still glorify the white outsider who comes to lead a native people?</li>
+              <li><span class="q-num">4.</span> The Atreides are "the good imperialists." Is there such a thing?</li>
+              <li><span class="q-num">5.</span> If spice existed today, which real country or company would control it?</li>
+              <li><span class="q-num">6.</span> <span class="q-badge hot">Hot Take</span> Every blockbuster "chosen saviour in a foreign land" story is secretly about empire. Name one that isn't.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S4 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">04</span>
+          <div class="session-info">
+            <p class="session-title">The Women of Dune</p>
+            <p class="session-tagline">"They knew everything and still got treated like props."</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> Lady Jessica, Chani, Reverend Mother Mohiam — who is the most powerful character in the films?</li>
+              <li><span class="q-num">2.</span> The Bene Gesserit have been running a secret eugenics program for thousands of years. Are they the real villains?</li>
+              <li><span class="q-num">3.</span> Chani in the Denis Villeneuve films is very different from the books. Which version do you prefer and why?</li>
+              <li><span class="q-num">4.</span> Is Dune feminist, or does it just have strong women in service of a man's story?</li>
+              <li><span class="q-num">5.</span> <span class="q-badge fun">Speculation</span> If the Bene Gesserit ran your country, would things actually be better or worse?</li>
+              <li><span class="q-num">6.</span> Zendaya has almost no dialogue in Part 1. Did that absence make Chani more or less interesting as a character?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S5 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">05</span>
+          <div class="session-info">
+            <p class="session-title">Sandworms — The Mythology of a Monster</p>
+            <p class="session-tagline">"The most iconic creature in sci-fi. Why?"</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> The sandworms are sacred, terrifying, and also the source of all spice. What does that symbolism mean to you?</li>
+              <li><span class="q-num">2.</span> Riding a sandworm is a Fremen rite of passage. What's the equivalent in your culture or life?</li>
+              <li><span class="q-num">3.</span> In the films, the worms feel like natural disasters. In the books, they're more like gods. Which version is scarier?</li>
+              <li><span class="q-num">4.</span> <span class="q-badge fun">Creative</span> Describe a sandworm using only things from your kitchen.</li>
+              <li><span class="q-num">5.</span> If sandworms existed on Earth, where would they live and what would they eat?</li>
+              <li><span class="q-num">6.</span> The worm's sound design in Villeneuve's films won awards. How does sound build a creature's mythology before you even see it?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S6 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">06</span>
+          <div class="session-info">
+            <p class="session-title">Villeneuve vs. Lynch vs. the Miniseries</p>
+            <p class="session-tagline">"Three very different Dunes. Let's fight about it."</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> Have you seen the 1984 David Lynch film? What is even happening in that movie?</li>
+              <li><span class="q-num">2.</span> The 2000 Sci-Fi Channel miniseries is extremely cheap and extremely faithful. Does faithfulness matter if the budget is zero?</li>
+              <li><span class="q-num">3.</span> Villeneuve split Part 1 and Part 2. Was that the right call, or did it break the story's rhythm?</li>
+              <li><span class="q-num">4.</span> What does each adaptation understand about Dune that the others miss?</li>
+              <li><span class="q-num">5.</span> <span class="q-badge hot">Hot Take</span> The Lynch film is actually the most "Dune" of all of them because it's weird, overwhelming, and makes you feel lost. Agree?</li>
+              <li><span class="q-num">6.</span> Villeneuve shot Part 1 in a desaturated palette and Part 2 in warmer tones. What story is the colour grading telling?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S7 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">07</span>
+          <div class="session-info">
+            <p class="session-title">Religion as a Weapon</p>
+            <p class="session-tagline">"The Bene Gesserit literally planted prophecies on Arrakis on purpose. That's wild."</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> The Missionaria Protectiva — the Bene Gesserit spread religious myths to planets for future manipulation. How do you feel about that?</li>
+              <li><span class="q-num">2.</span> Paul uses Fremen religious belief to build his army. Is he exploiting them or genuinely becoming what they believe?</li>
+              <li><span class="q-num">3.</span> Can you think of historical examples of religion being used as a political tool in similar ways?</li>
+              <li><span class="q-num">4.</span> Is having a fake messiah worse than having a real one?</li>
+              <li><span class="q-num">5.</span> The Fremen believed before Paul arrived. Does it matter if the prophecy was manufactured?</li>
+              <li><span class="q-num">6.</span> <span class="q-badge debate">Debate</span> Is Paul's jihad an inevitable consequence of religion, or a personal moral failure?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S8 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">08</span>
+          <div class="session-info">
+            <p class="session-title">Ecology &amp; Climate — Arrakis as Climate Fiction</p>
+            <p class="session-tagline">"Herbert was writing about climate change before it was a conversation."</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> Arrakis is a desert planet because spice extraction destroys its ecosystem. Sound familiar?</li>
+              <li><span class="q-num">2.</span> The Fremen dream of terraforming Arrakis — turning it green. But the book treats this as a tragedy. Why?</li>
+              <li><span class="q-num">3.</span> Liet-Kynes dies believing in ecological restoration. Is that kind of hope naive or necessary?</li>
+              <li><span class="q-num">4.</span> <span class="q-badge fun">Creative</span> Pick one real environmental crisis and reframe it in Dune terms.</li>
+              <li><span class="q-num">5.</span> If you had to choose between economic prosperity and ecological preservation (like the Arrakis dilemma), what would you choose?</li>
+              <li><span class="q-num">6.</span> The stillsuit is a perfect closed-loop water recycling system. What would the equivalent look like for energy or food?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S9 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">09</span>
+          <div class="session-info">
+            <p class="session-title">Power, Betrayal &amp; Houses</p>
+            <p class="session-tagline">"Nobody in Dune has a single loyal friend."</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> The entire political structure of the Imperium is built on betrayal being more reliable than loyalty. Does that reflect how real politics works?</li>
+              <li><span class="q-num">2.</span> Who is the biggest traitor in Dune — and were they justified?</li>
+              <li><span class="q-num">3.</span> The Great Houses are noble families running everything. Compare to modern corporations, royal families, or political dynasties.</li>
+              <li><span class="q-num">4.</span> <span class="q-badge fun">Game</span> Assign each House (Atreides, Harkonnen, Corrino) to a real-world country, company, or political party. Defend your choices.</li>
+              <li><span class="q-num">5.</span> If you had to swear loyalty to one House, which and why?</li>
+              <li><span class="q-num">6.</span> The CHOAM corporation runs all trade in the Imperium. Is "a galaxy run by one monopoly" more or less believable than our own economic systems?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S10 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">10</span>
+          <div class="session-info">
+            <p class="session-title">Baron Harkonnen — Villain, Satirical Icon, or Both?</p>
+            <p class="session-tagline">"He's horrifying and also kind of hilarious and that's deliberate."</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> The Baron floats. He eats people. He monologues. Is he scary or campy?</li>
+              <li><span class="q-num">2.</span> Stellan Skarsgård's Baron vs. Ian McNeice's Baron vs. Kenneth McMillan's Baron — best performance?</li>
+              <li><span class="q-num">3.</span> The Harkonnens are coded as decadent, excessive, and cruel. What is Herbert (and Villeneuve) actually criticising through them?</li>
+              <li><span class="q-num">4.</span> Is Feyd-Rautha supposed to be the dark mirror of Paul, or his own thing entirely?</li>
+              <li><span class="q-num">5.</span> <span class="q-badge hot">Hot Take</span> The Harkonnens are actually more honest about power than the Atreides. Discuss.</li>
+              <li><span class="q-num">6.</span> Austin Butler plays Feyd almost entirely in black-and-white scenes. How did that aesthetic choice shape your perception of him?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /sessions-grid season 1 -->
+
+    <!-- Season divider -->
+    <div class="deco-divider">
+      <span class="deco-divider-sym">◆ &nbsp; SEASON II &nbsp; ◆</span>
+    </div>
+
+    <!-- SEASON 2 -->
+    <div class="season-label">Season II &nbsp;·&nbsp; The Science</div>
+    <p class="section-body" style="margin-bottom:2rem">Dive into the real science hiding inside Arrakis — guided by <em>The Science of Dune</em>. These sessions work best with some reading, but can also be approached through curiosity alone.</p>
+
+    <div class="sessions-grid">
+
+      <!-- S11 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">11</span>
+          <div class="session-info">
+            <p class="session-title">Real Sandworms? The Biology of Extreme Life</p>
+            <p class="session-tagline">"Life exists where we thought it couldn't."</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> Extremophiles — real organisms that survive in boiling vents, radioactive water, pure acid. How close is Earth already to Arrakis biology?</li>
+              <li><span class="q-num">2.</span> A sandworm 400 metres long would collapse under its own weight. What real biology would need to change for one to exist?</li>
+              <li><span class="q-num">3.</span> The worms produce spice as a metabolic byproduct. Real organisms produce compounds we use as drugs. Any parallels?</li>
+              <li><span class="q-num">4.</span> The Fremen believe the worms are divine. Does science and religion conflict in our treatment of endangered species?</li>
+              <li><span class="q-num">5.</span> <span class="q-badge fun">Speculation</span> Design a real-world organism that fills the same ecological niche as a sandworm.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S12 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">12</span>
+          <div class="session-info">
+            <p class="session-title">Could Arrakis Exist? Desert Planets &amp; Astronomy</p>
+            <p class="session-tagline">"The universe is mostly hostile. Arrakis might be generous."</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> Arrakis has two suns. We've found real planets in multi-star systems. What would living under two suns actually feel like?</li>
+              <li><span class="q-num">2.</span> A planet with no large bodies of water but a breathable atmosphere — is that physically possible? What would drive the water cycle?</li>
+              <li><span class="q-num">3.</span> The "real stars of Dune" chapter maps the Dune universe onto real star positions. Does grounding sci-fi in real science make it better or worse?</li>
+              <li><span class="q-num">4.</span> We've found exoplanets in habitable zones that look like deserts. If we discovered one, should we try to settle it?</li>
+              <li><span class="q-num">5.</span> <span class="q-badge debate">Debate</span> The real challenge of Arrakis isn't the heat — it's the psychological effect of scarcity. Agree?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S13 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">13</span>
+          <div class="session-info">
+            <p class="session-title">Engineering Survival — The Stillsuit Problem</p>
+            <p class="session-tagline">"Your body wastes 2 litres of water a day. Can we fix that?"</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> The stillsuit recycles all body moisture including sweat, urine, and breath. Is that even feasible with real materials science?</li>
+              <li><span class="q-num">2.</span> The Fremen's whole culture is shaped by water scarcity. What does that tell us about how environment shapes society?</li>
+              <li><span class="q-num">3.</span> We already have atmospheric water generators that pull water from desert air. Is the stillsuit closer to reality than we think?</li>
+              <li><span class="q-num">4.</span> Spitting in someone's presence is an insult on Arrakis. What physical substances do we consider sacred or taboo — and why?</li>
+              <li><span class="q-num">5.</span> <span class="q-badge fun">Design</span> If you were designing a survival suit for a real desert planet, what three features would you prioritise?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S14 -->
+      <div class="session-card reveal">
+        <div class="session-header" onclick="toggleSession(this)">
+          <span class="session-num">14</span>
+          <div class="session-info">
+            <p class="session-title">Prescience, Memory &amp; The Mind</p>
+            <p class="session-tagline">"The spice unlocks something in the brain. What exactly?"</p>
+          </div>
+          <span class="session-arrow">▼</span>
+        </div>
+        <div class="session-body">
+          <div class="session-body-inner">
+            <ul class="questions-list">
+              <li><span class="q-num">1.</span> Prescience in Dune is less about seeing the future and more about seeing probability. Is that a scientific or mystical concept?</li>
+              <li><span class="q-num">2.</span> Spice expands consciousness. Real psychedelics also alter perception of time. Is Herbert describing a real neurological mechanism?</li>
+              <li><span class="q-num">3.</span> The Mentats are human computers, trained to replace AI after the Butlerian Jihad. How much of human cognition could actually be optimised through training?</li>
+              <li><span class="q-num">4.</span> The Tleilaxu use genetic memory — memories passed down through DNA. Is there any real science behind inherited trauma or memory?</li>
+              <li><span class="q-num">5.</span> <span class="q-badge debate">Debate</span> If you could take a substance that made you more intelligent but caused terrible visions of violence — would you?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /sessions-grid season 2 -->
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     QUOTE BREAK 2
+═════════════════════════════════════════════════════════════ -->
+<div class="spice-break">
+  <div class="spice-break-stipple"></div>
+  <div class="spice-eye">
+    <div class="spice-eye-line"></div>
+    <div class="spice-eye-dot"></div>
+    <div class="spice-eye-line right"></div>
+  </div>
+  <p class="spice-break-text">"I must not fear. Fear is the mind-killer. Fear is the little-death that brings total obliteration."</p>
+  <p class="spice-break-attr">— Paul Atreides, the Litany Against Fear</p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     FILM ADAPTATIONS
+═════════════════════════════════════════════════════════════ -->
+<section id="films">
+  <div class="container">
+    <p class="section-eyebrow">Adaptations</p>
+    <h2 class="section-title">Three Visions of Arrakis</h2>
+    <p class="section-body">Each adaptation is a different answer to the same impossible question: how do you film the unfilmable? One went baroque and strange. One went cheap and faithful. One went silent and vast.</p>
+
+    <div class="films-grid">
+
+      <div class="film-card reveal">
+        <p class="film-year">1984</p>
+        <p class="film-name">Dune</p>
+        <p class="film-director">David Lynch</p>
+        <p class="section-body" style="font-size:0.9rem; margin-bottom:1rem">Surreal, over-budget, disowned by its director. Somehow unforgettable. Kyle MacLachlan, Sting, Patrick Stewart, and the strangest voice-over in cinema history.</p>
+        <div class="film-tags">
+          <span class="film-tag">Surreal</span>
+          <span class="film-tag">Theatrical</span>
+          <span class="film-tag">Controversial</span>
+          <span class="film-tag">Cult Classic</span>
+        </div>
+      </div>
+
+      <div class="film-card reveal" style="transition-delay:0.1s">
+        <p class="film-year">2000 &amp; 2003</p>
+        <p class="film-name">Frank Herbert's Dune &amp; Children of Dune</p>
+        <p class="film-director">Sci-Fi Channel Miniseries</p>
+        <p class="section-body" style="font-size:0.9rem; margin-bottom:1rem">Low budget. Extremely faithful. James McAvoy as young Leto II. The miniseries that fans loved and critics mostly ignored, until Villeneuve made everyone revisit it.</p>
+        <div class="film-tags">
+          <span class="film-tag">Faithful</span>
+          <span class="film-tag">Low Budget</span>
+          <span class="film-tag">Complete Story</span>
+        </div>
+      </div>
+
+      <div class="film-card reveal" style="transition-delay:0.2s">
+        <p class="film-year">2021 &amp; 2024</p>
+        <p class="film-name">Dune: Part One &amp; Part Two</p>
+        <p class="film-director">Denis Villeneuve</p>
+        <p class="section-body" style="font-size:0.9rem; margin-bottom:1rem">Vast, silent, and operatic. Villeneuve treats Arrakis like a painting. Timothée Chalamet, Zendaya, Rebecca Ferguson, Austin Butler, and Javier Bardem.</p>
+        <div class="film-tags">
+          <span class="film-tag">Epic</span>
+          <span class="film-tag">IMAX</span>
+          <span class="film-tag">Award-winning</span>
+          <span class="film-tag">Critical</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Cast spotlight -->
+    <div class="book-card bracket-card mt-3 reveal">
+      <p class="book-card-title">Villeneuve Cast &amp; Characters — A Quick Reference</p>
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:1rem; margin-top:0.5rem">
+        <div>
+          <p style="font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold); margin-bottom:0.2rem">Timothée Chalamet</p>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.9rem; color:var(--text-muted)">Paul Atreides — heir, prophet, reluctant messiah</p>
+        </div>
+        <div>
+          <p style="font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold); margin-bottom:0.2rem">Zendaya</p>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.9rem; color:var(--text-muted)">Chani — Fremen warrior, Paul's conscience</p>
+        </div>
+        <div>
+          <p style="font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold); margin-bottom:0.2rem">Rebecca Ferguson</p>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.9rem; color:var(--text-muted)">Lady Jessica — Bene Gesserit, mother, survivor</p>
+        </div>
+        <div>
+          <p style="font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold); margin-bottom:0.2rem">Stellan Skarsgård</p>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.9rem; color:var(--text-muted)">Baron Harkonnen — grotesque, brilliant, floating</p>
+        </div>
+        <div>
+          <p style="font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold); margin-bottom:0.2rem">Austin Butler</p>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.9rem; color:var(--text-muted)">Feyd-Rautha — Paul's dark shadow</p>
+        </div>
+        <div>
+          <p style="font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold); margin-bottom:0.2rem">Javier Bardem</p>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.9rem; color:var(--text-muted)">Stilgar — Fremen naib, true believer</p>
+        </div>
+        <div>
+          <p style="font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold); margin-bottom:0.2rem">Charlotte Rampling</p>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.9rem; color:var(--text-muted)">Reverend Mother Mohiam — Bene Gesserit Truthsayer</p>
+        </div>
+        <div>
+          <p style="font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold); margin-bottom:0.2rem">Josh Brolin</p>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.9rem; color:var(--text-muted)">Gurney Halleck — weapons master, loyal to the end</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     THE SCIENCE (Chapter cards)
+═════════════════════════════════════════════════════════════ -->
+<section id="science">
+  <div class="container">
+    <p class="section-eyebrow">The Science of Dune</p>
+    <h2 class="section-title">What's Real on Arrakis?</h2>
+    <p class="section-body">Frank Herbert spent years researching ecology, religion, politics, and physics. The book's scientists took him seriously. Here's what holds up.</p>
+
+    <div class="science-grid mt-2">
+
+      <div class="science-card reveal">
+        <div class="science-icon-wrap">🪱</div>
+        <p class="science-topic">Sandworm Biology</p>
+        <p class="science-desc">Real extremophiles survive in conditions nearly as hostile as Arrakis. The worm's tube-segment anatomy mirrors real annelid biology scaled to the impossible.</p>
+      </div>
+
+      <div class="science-card reveal" style="transition-delay:0.05s">
+        <div class="science-icon-wrap">🌊</div>
+        <p class="science-topic">Dune Formation</p>
+        <p class="science-desc">Ralph Lorenz studies real dunes on Titan and Mars. Arrakis's dune patterns follow real aeolian physics — barchans, seifs, draa. Herbert got the geography right.</p>
+      </div>
+
+      <div class="science-card reveal" style="transition-delay:0.1s">
+        <div class="science-icon-wrap">🧬</div>
+        <p class="science-topic">Genetics &amp; Breeding</p>
+        <p class="science-desc">The Bene Gesserit breeding program mirrors real selective pressure. "From Silver Fox to Kwisatz Haderach" traces the science from 1950s fox domestication to genetic destiny.</p>
+      </div>
+
+      <div class="science-card reveal" style="transition-delay:0.15s">
+        <div class="science-icon-wrap">✨</div>
+        <p class="science-topic">Spice &amp; Consciousness</p>
+        <p class="science-desc">Melange is a real-world composite: psychedelics, antiaging compounds, and nootropics. Real neuroscience partially supports what Herbert imagined spice does to the brain.</p>
+      </div>
+
+      <div class="science-card reveal" style="transition-delay:0.2s">
+        <div class="science-icon-wrap">🌌</div>
+        <p class="science-topic">Space Folding</p>
+        <p class="science-desc">"Cosmic Origami" explores whether folding space — collapsing the distance between two points — has any basis in real physics. (Spoiler: barely. But barely is enough.)</p>
+      </div>
+
+      <div class="science-card reveal" style="transition-delay:0.25s">
+        <div class="science-icon-wrap">🔮</div>
+        <p class="science-topic">Prescience &amp; Prophecy</p>
+        <p class="science-desc">Pattern recognition, probability calculation, and altered states of consciousness. Paul's visions look increasingly like what neuroscientists call "future simulation."</p>
+      </div>
+
+      <div class="science-card reveal" style="transition-delay:0.3s">
+        <div class="science-icon-wrap">💧</div>
+        <p class="science-topic">Stillsuit Engineering</p>
+        <p class="science-desc">Closed-loop water recycling from body fluids. Membrane science has come far enough that this is now an engineering problem, not a physics impossibility.</p>
+      </div>
+
+      <div class="science-card reveal" style="transition-delay:0.35s">
+        <div class="science-icon-wrap">⭐</div>
+        <p class="science-topic">Arrakis Astronomy</p>
+        <p class="science-desc">Kevin Grazier maps the Dune universe onto real stellar coordinates. Binary star systems that could host desert planets in habitable zones actually exist.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+═════════════════════════════════════════════════════════════ -->
+<footer>
+  <p class="footer-logo">Dune Club</p>
+  <p class="footer-text">"The concept of progress acts as a protective mechanism to shield us from the terrors of the future."</p>
+  <p class="footer-copy">Based on <em>The Science of Dune</em> · For discussion purposes only · All rights to original authors</p>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCRIPTS
+═════════════════════════════════════════════════════════════ -->
+<script>
+/* ── Mobile Nav ─────────────────────────────────────────────── */
+const burger = document.getElementById('burger');
+const navLinks = document.getElementById('navLinks');
+burger.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+});
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => navLinks.classList.remove('open'));
+});
+
+
+/* ── Session Accordion ──────────────────────────────────────── */
+function toggleSession(header) {
+  const card = header.parentElement;
+  const isOpen = card.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.session-card.open').forEach(c => c.classList.remove('open'));
+  // Open clicked if it was closed
+  if (!isOpen) card.classList.add('open');
+}
+
+
+/* ── Scroll Reveal ──────────────────────────────────────────── */
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(el => observer.observe(el));
+
+
+/* ── Sand Particle Canvas ───────────────────────────────────── */
+(function() {
+  const canvas = document.getElementById('sandCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  function createParticle() {
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.6 + 0.3,
+      speedX: (Math.random() - 0.3) * 0.4,
+      speedY: -(Math.random() * 0.25 + 0.05),
+      opacity: Math.random() * 0.55 + 0.05,
+      hue: 35 + Math.random() * 25,
+      sat: 60 + Math.random() * 30,
+      life: 1,
+    };
+  }
+
+  function init() {
+    resize();
+    particles = [];
+    for (let i = 0; i < 180; i++) {
+      const p = createParticle();
+      p.y = Math.random() * H; // distribute initially
+      particles.push(p);
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach((p, i) => {
+      p.x += p.speedX;
+      p.y += p.speedY;
+
+      // drift horizontally
+      p.speedX += (Math.random() - 0.5) * 0.015;
+      p.speedX = Math.max(-0.6, Math.min(0.6, p.speedX));
+
+      if (p.y < -10 || p.x < -20 || p.x > W + 20) {
+        particles[i] = createParticle();
+        particles[i].y = H + 5;
+        particles[i].x = Math.random() * W;
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue}, ${p.sat}%, 65%, ${p.opacity})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); });
+  init();
+  draw();
+})();
+
+
+/* ── Smooth active nav on scroll ────────────────────────────── */
+const sections = document.querySelectorAll('section[id], footer');
+const navAnchors = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 80) current = s.id || '';
+  });
+  navAnchors.forEach(a => {
+    a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--gold-light)' : '';
+  });
+}, { passive: true });
+</script>
+
+</body>
+</html>
