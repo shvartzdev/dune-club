@@ -340,150 +340,291 @@
       .about-grid { grid-template-columns: 1fr; }
     }
 
-    /* ── Sessions ─────────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════
+       ROADMAP — Desert Journey Layout
+    ══════════════════════════════════════════════════════ */
     #sessions { background: #0a0804; }
 
-    .season-label {
-      display: inline-flex;
+    /* Wrapper with the continuous spine line */
+    .roadmap-wrapper {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .roadmap-wrapper::before {
+      content: '';
+      position: absolute;
+      left: calc(50% - 0.5px);
+      top: 4rem; bottom: 1rem;
+      width: 1px;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        var(--gold-dim) 3%,
+        var(--gold-dim) 97%,
+        transparent 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Season banner row (full width) */
+    .rm-season-row {
+      display: flex;
       align-items: center;
-      gap: 0.7rem;
+      gap: 1.2rem;
+      padding: 2.5rem 0 2.2rem;
+      position: relative;
+      z-index: 2;
+    }
+    .rm-season-row::before,
+    .rm-season-row::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .rm-season-tag {
       font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--bg-solid);
       background: var(--gold);
-      padding: 0.3rem 0.9rem;
+      padding: 0.3rem 1rem;
       border-radius: 2px;
-      margin-bottom: 2.2rem;
       font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .sessions-grid {
+    /* Session group: 3-column grid */
+    .rm-session-group {
+      display: grid;
+      grid-template-columns: 1fr 46px 1fr;
+      position: relative;
+      padding-bottom: 1rem;
+    }
+
+    /* Node column */
+    .rm-node-cell {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      align-items: center;
+      padding-top: 2rem;
+      position: relative;
+      z-index: 2;
+      overflow: visible;
     }
 
-    .session-card {
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      background: var(--card);
-      overflow: hidden;
-      transition: border-color 0.25s;
-    }
-    .session-card:hover { border-color: var(--border-hover); }
-    .session-card.open  { border-color: var(--gold-dim); }
-
-    .session-header {
+    .rm-node {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      background: #110d08;
+      border: 1px solid var(--gold);
       display: flex;
       align-items: center;
-      gap: 1rem;
-      padding: 1.1rem 1.4rem;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.2s;
-    }
-    .session-header:hover { background: var(--card-hover); }
-
-    .session-num {
+      justify-content: center;
       font-family: 'Cinzel', serif;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: var(--gold);
-      min-width: 2.4rem;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 3;
+      box-shadow:
+        0 0 18px rgba(200,162,42,0.22),
+        0 0 0 5px rgba(200,162,42,0.05);
       letter-spacing: 0.05em;
     }
 
-    .session-info { flex: 1; }
+    /* Card columns */
+    .rm-left-col,
+    .rm-right-col {
+      position: relative;
+      overflow: visible;
+      padding: 1.5rem 0;
+    }
+    .rm-left-col  { padding-right: 1.4rem; }
+    .rm-right-col { padding-left:  1.4rem; }
+    .rm-empty { /* placeholder */ }
 
-    .session-title {
+    /* Connector line: left col → node center (23px into node col) */
+    .rm-left-col::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: calc(2rem + 23px);
+      width: 23px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-dim), transparent);
+      z-index: 1;
+    }
+    /* Connector line: node center → right col */
+    .rm-right-col::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: calc(2rem + 23px);
+      width: 23px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim));
+      z-index: 1;
+    }
+
+    /* The session card itself */
+    .rm-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 1.3rem 1.5rem 1.4rem;
+      position: relative;
+      transition: border-color 0.25s, background 0.25s;
+      height: 100%;
+    }
+    .rm-card:hover {
+      border-color: var(--border-hover);
+      background: var(--card-hover);
+    }
+    /* Top shimmer line */
+    .rm-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 15%; right: 15%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    }
+
+    /* Card header */
+    .rm-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 1px solid rgba(200,162,42,0.12);
+    }
+    .rm-num-badge {
       font-family: 'Cinzel', serif;
-      font-size: clamp(0.85rem, 1.8vw, 1rem);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      border-radius: 3px;
+      padding: 0.15rem 0.45rem;
+      flex-shrink: 0;
+      letter-spacing: 0.08em;
+      margin-top: 0.1rem;
+      background: rgba(200,162,42,0.06);
+    }
+    .rm-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.78rem, 1.3vw, 0.92rem);
       font-weight: 600;
       color: var(--text);
-      line-height: 1.3;
+      line-height: 1.35;
+      margin-bottom: 0.25rem;
     }
-
-    .session-tagline {
+    .rm-tagline {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-muted);
-      margin-top: 0.15rem;
+      line-height: 1.5;
     }
 
-    .session-arrow {
-      color: var(--gold-dim);
-      font-size: 0.7rem;
-      transition: transform 0.3s, color 0.2s;
-      flex-shrink: 0;
-    }
-    .session-card.open .session-arrow {
-      transform: rotate(180deg);
-      color: var(--gold);
-    }
-
-    .session-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1);
-    }
-    .session-card.open .session-body {
-      max-height: 1000px;
-    }
-
-    .session-body-inner {
-      padding: 0 1.4rem 1.4rem 4.4rem;
-      border-top: 1px solid var(--border);
-      padding-top: 1.2rem;
-    }
-
-    .questions-list {
+    /* Questions */
+    .rm-questions {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.9rem;
+      gap: 0.7rem;
     }
-
-    .questions-list li {
+    .rm-questions li {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(0.95rem, 1.6vw, 1.08rem);
+      font-size: clamp(0.88rem, 1.3vw, 1rem);
       color: var(--text);
-      line-height: 1.65;
+      line-height: 1.6;
       display: flex;
       align-items: baseline;
-      gap: 0.75rem;
+      gap: 0.55rem;
     }
-
-    .questions-list li .q-num {
-      font-family: 'Cinzel', serif;
-      font-size: 0.65rem;
-      color: var(--gold);
-      min-width: 1.4rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      flex-shrink: 0;
-    }
-
-    .q-badge {
-      display: inline-block;
-      padding: 0.12rem 0.55rem;
-      border-radius: 2px;
+    .rm-qnum {
       font-family: 'Cinzel', serif;
       font-size: 0.58rem;
-      letter-spacing: 0.12em;
+      color: var(--gold);
+      min-width: 1.1rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      opacity: 0.65;
+    }
+
+    /* q-badges (keep from old design) */
+    .q-badge {
+      display: inline-block;
+      padding: 0.1rem 0.45rem;
+      border-radius: 2px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       font-weight: 700;
-      margin-right: 0.4rem;
+      margin-right: 0.3rem;
       vertical-align: middle;
+      flex-shrink: 0;
     }
-    .q-badge.hot  { background: rgba(200,80,30,0.2); color: #e07040; border: 1px solid rgba(200,80,30,0.3); }
-    .q-badge.fun  { background: rgba(80,160,100,0.15); color: #60b878; border: 1px solid rgba(80,160,100,0.25); }
-    .q-badge.debate { background: rgba(200,162,42,0.15); color: var(--gold); border: 1px solid var(--gold-dim); }
+    .q-badge.hot    { background: rgba(200,80,30,0.18); color: #e07040; border: 1px solid rgba(200,80,30,0.28); }
+    .q-badge.fun    { background: rgba(80,160,100,0.12); color: #60b878; border: 1px solid rgba(80,160,100,0.22); }
+    .q-badge.debate { background: rgba(200,162,42,0.12); color: var(--gold); border: 1px solid var(--gold-dim); }
 
-    @media (max-width: 500px) {
-      .session-body-inner { padding-left: 1.4rem; }
+    /* Mobile: single-column spine layout */
+    @media (max-width: 680px) {
+      .roadmap-wrapper::before { left: 20px; }
+
+      .rm-session-group {
+        grid-template-columns: 40px 1fr;
+      }
+      .rm-empty { display: none; }
+
+      /* Both left and right cards go to column 2 */
+      .rm-left-col, .rm-right-col {
+        grid-column: 2;
+        grid-row: 1;
+        padding: 1rem 0 1rem 0.9rem;
+      }
+      /* Node always in column 1 */
+      .rm-node-cell {
+        grid-column: 1;
+        grid-row: 1;
+        padding-top: 1.5rem;
+      }
+      /* Spine line through each node cell on mobile */
+      .rm-node-cell::before {
+        content: '';
+        position: absolute;
+        left: 50%; top: 0; bottom: 0;
+        width: 1px;
+        background: var(--gold-dim);
+        transform: translateX(-50%);
+        z-index: 0;
+      }
+      /* Connector from node to card */
+      .rm-node-cell::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: calc(1.5rem + 23px);
+        width: calc(50% + 4px);
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--gold-dim));
+        z-index: 1;
+      }
+      /* Remove desktop connectors */
+      .rm-left-col::after,
+      .rm-right-col::before { display: none; }
+      /* Hide main spine on mobile (each node-cell handles its own) */
+      .roadmap-wrapper::before { display: none; }
+
+      .rm-node { width: 38px; height: 38px; font-size: 0.65rem; }
+      .rm-season-row { padding: 2rem 0 1.5rem; }
     }
 
     /* ── Spice Interlude ──────────────────────────────────── */
@@ -1220,361 +1361,370 @@
 <section id="sessions">
   <div class="container">
     <p class="section-eyebrow">Programme</p>
-    <h2 class="section-title">Discussion Sessions</h2>
-    <p class="section-body" style="margin-bottom:2.5rem">Each session opens with a central provocation, then unpacks it through a mix of film analysis, real-world parallels, and pure speculation. No homework required for Season 1.</p>
+    <h2 class="section-title">The Journey Across Arrakis</h2>
+    <p class="section-body" style="margin-bottom:2.5rem">Each session is a camp on the path. Season I explores the films — no reading required. Season II follows the science deeper into the desert.</p>
 
-    <!-- SEASON 1 -->
-    <div class="season-label">Season I &nbsp;·&nbsp; The World</div>
+    <!-- ROADMAP -->
+    <div class="roadmap-wrapper">
 
-    <div class="sessions-grid">
+      <!-- ─── SEASON I ─────────────────────────────────────── -->
+      <div class="rm-season-row">
+        <span class="rm-season-tag">Season I · The World</span>
+      </div>
 
-      <!-- S1 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">01</span>
-          <div class="session-info">
-            <p class="session-title">First Impressions &amp; The Vibe</p>
-            <p class="session-tagline">"Why does Dune feel so different from other sci-fi?"</p>
+      <!-- S01 LEFT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-left-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">01</span>
+              <div>
+                <p class="rm-title">First Impressions &amp; The Vibe</p>
+                <p class="rm-tagline">"Why does Dune feel so different from other sci-fi?"</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> What was your first reaction to Dune — movie, book, or both? Did you get it immediately or did it take time?</li>
+              <li><span class="rm-qnum">2.</span> Why does Dune feel so serious compared to Marvel or Star Wars? Is that a feature or a bug?</li>
+              <li><span class="rm-qnum">3.</span> The movie has almost no jokes. Did that bother you or did it feel exactly right?</li>
+              <li><span class="rm-qnum">4.</span> If someone asked "what is Dune about?" in one sentence — what would you say?</li>
+              <li><span class="rm-qnum">5.</span> <span class="q-badge hot">Hot Take</span> "Dune is just Lawrence of Arabia with sandworms." Agree?</li>
+              <li><span class="rm-qnum">6.</span> Hans Zimmer built entirely new instruments for the score. Does music shape how "alien" a world feels?</li>
+            </ul>
           </div>
-          <span class="session-arrow">▼</span>
         </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> What was your first reaction to Dune (movie, book, or both)? Did you get it immediately or did it take time to click?</li>
-              <li><span class="q-num">2.</span> Why does Dune feel so serious and heavy compared to Marvel or Star Wars? Is that good or bad?</li>
-              <li><span class="q-num">3.</span> The movie has almost no jokes. Did that bother you or did it feel right?</li>
-              <li><span class="q-num">4.</span> If someone asked you "what is Dune about?" in one sentence — what would you say?</li>
-              <li><span class="q-num">5.</span> <span class="q-badge hot">Hot Take</span> "Dune is just Lawrence of Arabia with sandworms." Agree or disagree?</li>
-              <li><span class="q-num">6.</span> Hans Zimmer's score uses entirely new instruments. Does music shape how "alien" a world feels?</li>
+        <div class="rm-node-cell"><div class="rm-node">01</div></div>
+        <div class="rm-empty"></div>
+      </div>
+
+      <!-- S02 RIGHT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-empty"></div>
+        <div class="rm-node-cell"><div class="rm-node">02</div></div>
+        <div class="rm-right-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">02</span>
+              <div>
+                <p class="rm-title">Paul Atreides — Hero or Warning?</p>
+                <p class="rm-tagline">"Is Paul actually the good guy?"</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> Do you root for Paul in the films? When did that feeling shift, if ever?</li>
+              <li><span class="rm-qnum">2.</span> Paul knows the future but keeps making the same choices anyway. Is that brave or stupid?</li>
+              <li><span class="rm-qnum">3.</span> Dune is supposedly a deconstruction of the "chosen one" trope. Did the films actually make Paul feel dangerous rather than cool?</li>
+              <li><span class="rm-qnum">4.</span> Compare Paul to Harry Potter, Neo, Frodo. What's structurally different?</li>
+              <li><span class="rm-qnum">5.</span> <span class="q-badge debate">Debate</span> Is Paul Atreides a hero, a villain, or a victim?</li>
+              <li><span class="rm-qnum">6.</span> Chalamet plays Paul as fragile and reluctant. Does casting shape how we judge a character morally?</li>
             </ul>
           </div>
         </div>
       </div>
 
-      <!-- S2 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">02</span>
-          <div class="session-info">
-            <p class="session-title">Paul Atreides — Hero or Warning?</p>
-            <p class="session-tagline">"Is Paul actually the good guy?"</p>
+      <!-- S03 LEFT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-left-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">03</span>
+              <div>
+                <p class="rm-title">Spice, Oil &amp; Real-World Politics</p>
+                <p class="rm-tagline">"Dune is basically about oil. Let's talk about that."</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> Herbert wrote Dune in the 1960s partly inspired by Middle Eastern oil politics. What parallels do you see today?</li>
+              <li><span class="rm-qnum">2.</span> The Fremen have lived in the desert forever — then outsiders arrive and say "we need what's under your sand." Does that sound familiar?</li>
+              <li><span class="rm-qnum">3.</span> Is Dune anti-imperialist, or does it still glorify the white outsider who leads a native people?</li>
+              <li><span class="rm-qnum">4.</span> The Atreides are "the good imperialists." Is there such a thing?</li>
+              <li><span class="rm-qnum">5.</span> If spice existed today, which real country or company would control it?</li>
+              <li><span class="rm-qnum">6.</span> <span class="q-badge hot">Hot Take</span> Every "chosen saviour in a foreign land" blockbuster is secretly about empire. Name one that isn't.</li>
+            </ul>
           </div>
-          <span class="session-arrow">▼</span>
         </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> Do you root for Paul in the films? When did that feeling change, if ever?</li>
-              <li><span class="q-num">2.</span> Paul knows the future but keeps making the same choices anyway. Is that brave or stupid?</li>
-              <li><span class="q-num">3.</span> "The chosen one" — Dune is supposedly a deconstruction of this trope. Did the movies actually succeed at making Paul feel dangerous rather than cool?</li>
-              <li><span class="q-num">4.</span> Compare Paul to other "chosen ones" — Harry Potter, Neo, Frodo. What's different?</li>
-              <li><span class="q-num">5.</span> <span class="q-badge debate">Debate</span> Is Paul Atreides a hero, a villain, or a victim?</li>
-              <li><span class="q-num">6.</span> Timothée Chalamet plays Paul as fragile, almost reluctant. Does casting shape how we judge a character morally?</li>
+        <div class="rm-node-cell"><div class="rm-node">03</div></div>
+        <div class="rm-empty"></div>
+      </div>
+
+      <!-- S04 RIGHT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-empty"></div>
+        <div class="rm-node-cell"><div class="rm-node">04</div></div>
+        <div class="rm-right-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">04</span>
+              <div>
+                <p class="rm-title">The Women of Dune</p>
+                <p class="rm-tagline">"They knew everything and still got treated like props."</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> Lady Jessica, Chani, Reverend Mother Mohiam — who is the most powerful character in the films?</li>
+              <li><span class="rm-qnum">2.</span> The Bene Gesserit have been running a secret eugenics program for thousands of years. Are they the real villains?</li>
+              <li><span class="rm-qnum">3.</span> Chani in the Villeneuve films is very different from the books. Which version do you prefer and why?</li>
+              <li><span class="rm-qnum">4.</span> Is Dune feminist, or does it just have strong women in service of a man's story?</li>
+              <li><span class="rm-qnum">5.</span> <span class="q-badge fun">Speculation</span> If the Bene Gesserit ran your country, would things actually be better or worse?</li>
+              <li><span class="rm-qnum">6.</span> Zendaya has almost no dialogue in Part 1. Did that absence make Chani more or less interesting?</li>
             </ul>
           </div>
         </div>
       </div>
 
-      <!-- S3 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">03</span>
-          <div class="session-info">
-            <p class="session-title">Spice, Oil &amp; Real World Politics</p>
-            <p class="session-tagline">"Dune is basically about oil. Let's talk about that."</p>
+      <!-- S05 LEFT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-left-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">05</span>
+              <div>
+                <p class="rm-title">Sandworms — The Mythology of a Monster</p>
+                <p class="rm-tagline">"The most iconic creature in sci-fi. Why?"</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> The sandworms are sacred, terrifying, and also the source of all spice. What does that symbolism mean to you?</li>
+              <li><span class="rm-qnum">2.</span> Riding a sandworm is a Fremen rite of passage. What's the equivalent in your culture or life?</li>
+              <li><span class="rm-qnum">3.</span> In the films, worms feel like natural disasters. In the books, they're more like gods. Which version is scarier?</li>
+              <li><span class="rm-qnum">4.</span> <span class="q-badge fun">Creative</span> Describe a sandworm using only things from your kitchen.</li>
+              <li><span class="rm-qnum">5.</span> If sandworms existed on Earth, where would they live and what would they eat?</li>
+              <li><span class="rm-qnum">6.</span> The worm's sound design won awards. How does sound build a creature's mythology before you even see it?</li>
+            </ul>
           </div>
-          <span class="session-arrow">▼</span>
         </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> Herbert wrote Dune in the 1960s partly inspired by Middle Eastern oil politics. What parallels do you see today?</li>
-              <li><span class="q-num">2.</span> The Fremen have been living in the desert forever — then outsiders arrive and say "we need what's under your sand." Does that story sound familiar?</li>
-              <li><span class="q-num">3.</span> Is Dune anti-imperialist, or does it still glorify the white outsider who comes to lead a native people?</li>
-              <li><span class="q-num">4.</span> The Atreides are "the good imperialists." Is there such a thing?</li>
-              <li><span class="q-num">5.</span> If spice existed today, which real country or company would control it?</li>
-              <li><span class="q-num">6.</span> <span class="q-badge hot">Hot Take</span> Every blockbuster "chosen saviour in a foreign land" story is secretly about empire. Name one that isn't.</li>
+        <div class="rm-node-cell"><div class="rm-node">05</div></div>
+        <div class="rm-empty"></div>
+      </div>
+
+      <!-- S06 RIGHT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-empty"></div>
+        <div class="rm-node-cell"><div class="rm-node">06</div></div>
+        <div class="rm-right-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">06</span>
+              <div>
+                <p class="rm-title">Villeneuve vs. Lynch vs. the Miniseries</p>
+                <p class="rm-tagline">"Three very different Dunes. Let's fight about it."</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> Have you seen the 1984 David Lynch film? What is even happening in that movie?</li>
+              <li><span class="rm-qnum">2.</span> The 2000 Sci-Fi Channel miniseries is extremely cheap and extremely faithful. Does faithfulness matter if the budget is zero?</li>
+              <li><span class="rm-qnum">3.</span> Villeneuve split Part 1 and Part 2 across two films. Was that the right call, or did it break the story's rhythm?</li>
+              <li><span class="rm-qnum">4.</span> What does each adaptation understand about Dune that the others miss?</li>
+              <li><span class="rm-qnum">5.</span> <span class="q-badge hot">Hot Take</span> The Lynch film is the most "Dune" because it's weird, overwhelming, and makes you feel lost. Agree?</li>
+              <li><span class="rm-qnum">6.</span> Villeneuve shot Part 1 in desaturated blues and Part 2 in warm ambers. What story is the colour palette telling?</li>
             </ul>
           </div>
         </div>
       </div>
 
-      <!-- S4 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">04</span>
-          <div class="session-info">
-            <p class="session-title">The Women of Dune</p>
-            <p class="session-tagline">"They knew everything and still got treated like props."</p>
+      <!-- S07 LEFT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-left-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">07</span>
+              <div>
+                <p class="rm-title">Religion as a Weapon</p>
+                <p class="rm-tagline">"The Bene Gesserit planted prophecies on purpose. That's wild."</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> The Missionaria Protectiva spread religious myths to planets for future manipulation. How do you feel about that?</li>
+              <li><span class="rm-qnum">2.</span> Paul uses Fremen religious belief to build his army. Is he exploiting them or genuinely becoming what they believe?</li>
+              <li><span class="rm-qnum">3.</span> Can you think of historical examples of religion being used as a political tool in similar ways?</li>
+              <li><span class="rm-qnum">4.</span> Is having a fake messiah worse than having a real one?</li>
+              <li><span class="rm-qnum">5.</span> The Fremen believed before Paul arrived. Does it matter if the prophecy was manufactured?</li>
+              <li><span class="rm-qnum">6.</span> <span class="q-badge debate">Debate</span> Is Paul's holy war an inevitable consequence of religion, or a personal moral failure?</li>
+            </ul>
           </div>
-          <span class="session-arrow">▼</span>
         </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> Lady Jessica, Chani, Reverend Mother Mohiam — who is the most powerful character in the films?</li>
-              <li><span class="q-num">2.</span> The Bene Gesserit have been running a secret eugenics program for thousands of years. Are they the real villains?</li>
-              <li><span class="q-num">3.</span> Chani in the Denis Villeneuve films is very different from the books. Which version do you prefer and why?</li>
-              <li><span class="q-num">4.</span> Is Dune feminist, or does it just have strong women in service of a man's story?</li>
-              <li><span class="q-num">5.</span> <span class="q-badge fun">Speculation</span> If the Bene Gesserit ran your country, would things actually be better or worse?</li>
-              <li><span class="q-num">6.</span> Zendaya has almost no dialogue in Part 1. Did that absence make Chani more or less interesting as a character?</li>
+        <div class="rm-node-cell"><div class="rm-node">07</div></div>
+        <div class="rm-empty"></div>
+      </div>
+
+      <!-- S08 RIGHT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-empty"></div>
+        <div class="rm-node-cell"><div class="rm-node">08</div></div>
+        <div class="rm-right-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">08</span>
+              <div>
+                <p class="rm-title">Ecology &amp; Climate — Arrakis as Climate Fiction</p>
+                <p class="rm-tagline">"Herbert was writing about climate change before it was a conversation."</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> Arrakis is a desert planet because spice extraction destroys its ecosystem. Sound familiar?</li>
+              <li><span class="rm-qnum">2.</span> The Fremen dream of terraforming Arrakis — turning it green. But the book treats this as a tragedy. Why?</li>
+              <li><span class="rm-qnum">3.</span> Liet-Kynes dies believing in ecological restoration. Is that kind of hope naive or necessary?</li>
+              <li><span class="rm-qnum">4.</span> <span class="q-badge fun">Creative</span> Pick one real environmental crisis and reframe it in Dune terms.</li>
+              <li><span class="rm-qnum">5.</span> If you had to choose between economic prosperity and ecological preservation (the Arrakis dilemma), what would you choose?</li>
+              <li><span class="rm-qnum">6.</span> The stillsuit is a perfect closed-loop recycling system. What would the equivalent look like for energy or food?</li>
             </ul>
           </div>
         </div>
       </div>
 
-      <!-- S5 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">05</span>
-          <div class="session-info">
-            <p class="session-title">Sandworms — The Mythology of a Monster</p>
-            <p class="session-tagline">"The most iconic creature in sci-fi. Why?"</p>
+      <!-- S09 LEFT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-left-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">09</span>
+              <div>
+                <p class="rm-title">Power, Betrayal &amp; Houses</p>
+                <p class="rm-tagline">"Nobody in Dune has a single loyal friend."</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> The Imperium is built on betrayal being more reliable than loyalty. Does that reflect how real politics works?</li>
+              <li><span class="rm-qnum">2.</span> Who is the biggest traitor in Dune — and were they justified?</li>
+              <li><span class="rm-qnum">3.</span> The Great Houses are noble families running everything. Compare to modern corporations, royal families, or dynasties.</li>
+              <li><span class="rm-qnum">4.</span> <span class="q-badge fun">Game</span> Assign each House (Atreides, Harkonnen, Corrino) to a real-world country, company, or party. Defend your choices.</li>
+              <li><span class="rm-qnum">5.</span> If you had to swear loyalty to one House, which and why?</li>
+              <li><span class="rm-qnum">6.</span> CHOAM runs all trade in the Imperium. Is "a galaxy run by one monopoly" more or less believable than our own economy?</li>
+            </ul>
           </div>
-          <span class="session-arrow">▼</span>
         </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> The sandworms are sacred, terrifying, and also the source of all spice. What does that symbolism mean to you?</li>
-              <li><span class="q-num">2.</span> Riding a sandworm is a Fremen rite of passage. What's the equivalent in your culture or life?</li>
-              <li><span class="q-num">3.</span> In the films, the worms feel like natural disasters. In the books, they're more like gods. Which version is scarier?</li>
-              <li><span class="q-num">4.</span> <span class="q-badge fun">Creative</span> Describe a sandworm using only things from your kitchen.</li>
-              <li><span class="q-num">5.</span> If sandworms existed on Earth, where would they live and what would they eat?</li>
-              <li><span class="q-num">6.</span> The worm's sound design in Villeneuve's films won awards. How does sound build a creature's mythology before you even see it?</li>
+        <div class="rm-node-cell"><div class="rm-node">09</div></div>
+        <div class="rm-empty"></div>
+      </div>
+
+      <!-- S10 RIGHT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-empty"></div>
+        <div class="rm-node-cell"><div class="rm-node">10</div></div>
+        <div class="rm-right-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">10</span>
+              <div>
+                <p class="rm-title">Baron Harkonnen — Villain, Satirical Icon, or Both?</p>
+                <p class="rm-tagline">"He's horrifying and also kind of hilarious. That's deliberate."</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> The Baron floats. He eats people. He monologues. Is he scary or campy?</li>
+              <li><span class="rm-qnum">2.</span> Stellan Skarsgård vs. Ian McNeice vs. Kenneth McMillan — best performance?</li>
+              <li><span class="rm-qnum">3.</span> The Harkonnens are coded as decadent, excessive, and cruel. What is Herbert actually criticising through them?</li>
+              <li><span class="rm-qnum">4.</span> Is Feyd-Rautha the dark mirror of Paul, or his own thing entirely?</li>
+              <li><span class="rm-qnum">5.</span> <span class="q-badge hot">Hot Take</span> The Harkonnens are actually more honest about power than the Atreides. Discuss.</li>
+              <li><span class="rm-qnum">6.</span> Austin Butler plays Feyd entirely in black-and-white scenes. How did that aesthetic shape your perception of him?</li>
             </ul>
           </div>
         </div>
       </div>
 
-      <!-- S6 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">06</span>
-          <div class="session-info">
-            <p class="session-title">Villeneuve vs. Lynch vs. the Miniseries</p>
-            <p class="session-tagline">"Three very different Dunes. Let's fight about it."</p>
+      <!-- ─── SEASON II ─────────────────────────────────────── -->
+      <div class="rm-season-row">
+        <span class="rm-season-tag">Season II · The Science</span>
+      </div>
+
+      <!-- S11 LEFT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-left-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">11</span>
+              <div>
+                <p class="rm-title">Real Sandworms? The Biology of Extreme Life</p>
+                <p class="rm-tagline">"Life exists where we thought it couldn't."</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> Extremophiles survive in boiling vents, radioactive water, pure acid. How close is Earth already to Arrakis biology?</li>
+              <li><span class="rm-qnum">2.</span> A 400-metre sandworm would collapse under its own weight. What real biology would need to change for one to exist?</li>
+              <li><span class="rm-qnum">3.</span> The worms produce spice as a metabolic byproduct. Real organisms produce compounds we use as drugs. Any parallels?</li>
+              <li><span class="rm-qnum">4.</span> The Fremen believe the worms are divine. Does science and religion conflict in how we treat endangered species?</li>
+              <li><span class="rm-qnum">5.</span> <span class="q-badge fun">Speculation</span> Design a real-world organism that fills the same ecological niche as a sandworm.</li>
+            </ul>
           </div>
-          <span class="session-arrow">▼</span>
         </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> Have you seen the 1984 David Lynch film? What is even happening in that movie?</li>
-              <li><span class="q-num">2.</span> The 2000 Sci-Fi Channel miniseries is extremely cheap and extremely faithful. Does faithfulness matter if the budget is zero?</li>
-              <li><span class="q-num">3.</span> Villeneuve split Part 1 and Part 2. Was that the right call, or did it break the story's rhythm?</li>
-              <li><span class="q-num">4.</span> What does each adaptation understand about Dune that the others miss?</li>
-              <li><span class="q-num">5.</span> <span class="q-badge hot">Hot Take</span> The Lynch film is actually the most "Dune" of all of them because it's weird, overwhelming, and makes you feel lost. Agree?</li>
-              <li><span class="q-num">6.</span> Villeneuve shot Part 1 in a desaturated palette and Part 2 in warmer tones. What story is the colour grading telling?</li>
+        <div class="rm-node-cell"><div class="rm-node">11</div></div>
+        <div class="rm-empty"></div>
+      </div>
+
+      <!-- S12 RIGHT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-empty"></div>
+        <div class="rm-node-cell"><div class="rm-node">12</div></div>
+        <div class="rm-right-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">12</span>
+              <div>
+                <p class="rm-title">Could Arrakis Exist? Desert Planets &amp; Astronomy</p>
+                <p class="rm-tagline">"The universe is mostly hostile. Arrakis might be generous."</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> Arrakis orbits two suns. We've found real planets in multi-star systems. What would living under two suns actually feel like?</li>
+              <li><span class="rm-qnum">2.</span> A planet with no large water bodies but a breathable atmosphere — is that physically possible? What drives the water cycle?</li>
+              <li><span class="rm-qnum">3.</span> The chapter "The Real Stars of Dune" maps the Dune universe onto real star positions. Does grounding sci-fi in real science make it better or worse?</li>
+              <li><span class="rm-qnum">4.</span> We've found desert exoplanets in habitable zones. If we discovered one, should we try to settle it?</li>
+              <li><span class="rm-qnum">5.</span> <span class="q-badge debate">Debate</span> The real challenge of Arrakis isn't the heat — it's the psychological effect of scarcity. Agree?</li>
             </ul>
           </div>
         </div>
       </div>
 
-      <!-- S7 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">07</span>
-          <div class="session-info">
-            <p class="session-title">Religion as a Weapon</p>
-            <p class="session-tagline">"The Bene Gesserit literally planted prophecies on Arrakis on purpose. That's wild."</p>
+      <!-- S13 LEFT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-left-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">13</span>
+              <div>
+                <p class="rm-title">Engineering Survival — The Stillsuit Problem</p>
+                <p class="rm-tagline">"Your body wastes 2 litres of water a day. Can we fix that?"</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> The stillsuit recycles all body moisture — sweat, urine, breath. Is that actually feasible with real materials science?</li>
+              <li><span class="rm-qnum">2.</span> The Fremen's whole culture is shaped by water scarcity. What does that tell us about how environment shapes society?</li>
+              <li><span class="rm-qnum">3.</span> We already have atmospheric water generators that pull water from desert air. Is the stillsuit closer to reality than we think?</li>
+              <li><span class="rm-qnum">4.</span> Spitting in someone's presence is an insult on Arrakis. What physical substances do we consider sacred or taboo — and why?</li>
+              <li><span class="rm-qnum">5.</span> <span class="q-badge fun">Design</span> If you were building a survival suit for a real desert planet, what three features would you prioritise?</li>
+            </ul>
           </div>
-          <span class="session-arrow">▼</span>
         </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> The Missionaria Protectiva — the Bene Gesserit spread religious myths to planets for future manipulation. How do you feel about that?</li>
-              <li><span class="q-num">2.</span> Paul uses Fremen religious belief to build his army. Is he exploiting them or genuinely becoming what they believe?</li>
-              <li><span class="q-num">3.</span> Can you think of historical examples of religion being used as a political tool in similar ways?</li>
-              <li><span class="q-num">4.</span> Is having a fake messiah worse than having a real one?</li>
-              <li><span class="q-num">5.</span> The Fremen believed before Paul arrived. Does it matter if the prophecy was manufactured?</li>
-              <li><span class="q-num">6.</span> <span class="q-badge debate">Debate</span> Is Paul's jihad an inevitable consequence of religion, or a personal moral failure?</li>
+        <div class="rm-node-cell"><div class="rm-node">13</div></div>
+        <div class="rm-empty"></div>
+      </div>
+
+      <!-- S14 RIGHT -->
+      <div class="rm-session-group reveal">
+        <div class="rm-empty"></div>
+        <div class="rm-node-cell"><div class="rm-node">14</div></div>
+        <div class="rm-right-col">
+          <div class="rm-card">
+            <div class="rm-header">
+              <span class="rm-num-badge">14</span>
+              <div>
+                <p class="rm-title">Prescience, Memory &amp; The Mind</p>
+                <p class="rm-tagline">"The spice unlocks something in the brain. What exactly?"</p>
+              </div>
+            </div>
+            <ul class="rm-questions">
+              <li><span class="rm-qnum">1.</span> Prescience in Dune is less about seeing the future and more about seeing probability. Is that a scientific or mystical concept?</li>
+              <li><span class="rm-qnum">2.</span> Spice expands consciousness. Real psychedelics also alter perception of time. Is Herbert describing a real neurological mechanism?</li>
+              <li><span class="rm-qnum">3.</span> The Mentats are human computers, trained to replace AI after the Butlerian Jihad. How much of human cognition could actually be optimised through training?</li>
+              <li><span class="rm-qnum">4.</span> The Tleilaxu use genetic memory — memories passed through DNA. Is there any real science behind inherited trauma or memory?</li>
+              <li><span class="rm-qnum">5.</span> <span class="q-badge debate">Debate</span> If you could take a substance that made you more intelligent but caused terrible visions of violence — would you?</li>
             </ul>
           </div>
         </div>
       </div>
 
-      <!-- S8 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">08</span>
-          <div class="session-info">
-            <p class="session-title">Ecology &amp; Climate — Arrakis as Climate Fiction</p>
-            <p class="session-tagline">"Herbert was writing about climate change before it was a conversation."</p>
-          </div>
-          <span class="session-arrow">▼</span>
-        </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> Arrakis is a desert planet because spice extraction destroys its ecosystem. Sound familiar?</li>
-              <li><span class="q-num">2.</span> The Fremen dream of terraforming Arrakis — turning it green. But the book treats this as a tragedy. Why?</li>
-              <li><span class="q-num">3.</span> Liet-Kynes dies believing in ecological restoration. Is that kind of hope naive or necessary?</li>
-              <li><span class="q-num">4.</span> <span class="q-badge fun">Creative</span> Pick one real environmental crisis and reframe it in Dune terms.</li>
-              <li><span class="q-num">5.</span> If you had to choose between economic prosperity and ecological preservation (like the Arrakis dilemma), what would you choose?</li>
-              <li><span class="q-num">6.</span> The stillsuit is a perfect closed-loop water recycling system. What would the equivalent look like for energy or food?</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- S9 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">09</span>
-          <div class="session-info">
-            <p class="session-title">Power, Betrayal &amp; Houses</p>
-            <p class="session-tagline">"Nobody in Dune has a single loyal friend."</p>
-          </div>
-          <span class="session-arrow">▼</span>
-        </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> The entire political structure of the Imperium is built on betrayal being more reliable than loyalty. Does that reflect how real politics works?</li>
-              <li><span class="q-num">2.</span> Who is the biggest traitor in Dune — and were they justified?</li>
-              <li><span class="q-num">3.</span> The Great Houses are noble families running everything. Compare to modern corporations, royal families, or political dynasties.</li>
-              <li><span class="q-num">4.</span> <span class="q-badge fun">Game</span> Assign each House (Atreides, Harkonnen, Corrino) to a real-world country, company, or political party. Defend your choices.</li>
-              <li><span class="q-num">5.</span> If you had to swear loyalty to one House, which and why?</li>
-              <li><span class="q-num">6.</span> The CHOAM corporation runs all trade in the Imperium. Is "a galaxy run by one monopoly" more or less believable than our own economic systems?</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- S10 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">10</span>
-          <div class="session-info">
-            <p class="session-title">Baron Harkonnen — Villain, Satirical Icon, or Both?</p>
-            <p class="session-tagline">"He's horrifying and also kind of hilarious and that's deliberate."</p>
-          </div>
-          <span class="session-arrow">▼</span>
-        </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> The Baron floats. He eats people. He monologues. Is he scary or campy?</li>
-              <li><span class="q-num">2.</span> Stellan Skarsgård's Baron vs. Ian McNeice's Baron vs. Kenneth McMillan's Baron — best performance?</li>
-              <li><span class="q-num">3.</span> The Harkonnens are coded as decadent, excessive, and cruel. What is Herbert (and Villeneuve) actually criticising through them?</li>
-              <li><span class="q-num">4.</span> Is Feyd-Rautha supposed to be the dark mirror of Paul, or his own thing entirely?</li>
-              <li><span class="q-num">5.</span> <span class="q-badge hot">Hot Take</span> The Harkonnens are actually more honest about power than the Atreides. Discuss.</li>
-              <li><span class="q-num">6.</span> Austin Butler plays Feyd almost entirely in black-and-white scenes. How did that aesthetic choice shape your perception of him?</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /sessions-grid season 1 -->
-
-    <!-- Season divider -->
-    <div class="deco-divider">
-      <span class="deco-divider-sym">◆ &nbsp; SEASON II &nbsp; ◆</span>
-    </div>
-
-    <!-- SEASON 2 -->
-    <div class="season-label">Season II &nbsp;·&nbsp; The Science</div>
-    <p class="section-body" style="margin-bottom:2rem">Dive into the real science hiding inside Arrakis — guided by <em>The Science of Dune</em>. These sessions work best with some reading, but can also be approached through curiosity alone.</p>
-
-    <div class="sessions-grid">
-
-      <!-- S11 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">11</span>
-          <div class="session-info">
-            <p class="session-title">Real Sandworms? The Biology of Extreme Life</p>
-            <p class="session-tagline">"Life exists where we thought it couldn't."</p>
-          </div>
-          <span class="session-arrow">▼</span>
-        </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> Extremophiles — real organisms that survive in boiling vents, radioactive water, pure acid. How close is Earth already to Arrakis biology?</li>
-              <li><span class="q-num">2.</span> A sandworm 400 metres long would collapse under its own weight. What real biology would need to change for one to exist?</li>
-              <li><span class="q-num">3.</span> The worms produce spice as a metabolic byproduct. Real organisms produce compounds we use as drugs. Any parallels?</li>
-              <li><span class="q-num">4.</span> The Fremen believe the worms are divine. Does science and religion conflict in our treatment of endangered species?</li>
-              <li><span class="q-num">5.</span> <span class="q-badge fun">Speculation</span> Design a real-world organism that fills the same ecological niche as a sandworm.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- S12 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">12</span>
-          <div class="session-info">
-            <p class="session-title">Could Arrakis Exist? Desert Planets &amp; Astronomy</p>
-            <p class="session-tagline">"The universe is mostly hostile. Arrakis might be generous."</p>
-          </div>
-          <span class="session-arrow">▼</span>
-        </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> Arrakis has two suns. We've found real planets in multi-star systems. What would living under two suns actually feel like?</li>
-              <li><span class="q-num">2.</span> A planet with no large bodies of water but a breathable atmosphere — is that physically possible? What would drive the water cycle?</li>
-              <li><span class="q-num">3.</span> The "real stars of Dune" chapter maps the Dune universe onto real star positions. Does grounding sci-fi in real science make it better or worse?</li>
-              <li><span class="q-num">4.</span> We've found exoplanets in habitable zones that look like deserts. If we discovered one, should we try to settle it?</li>
-              <li><span class="q-num">5.</span> <span class="q-badge debate">Debate</span> The real challenge of Arrakis isn't the heat — it's the psychological effect of scarcity. Agree?</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- S13 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">13</span>
-          <div class="session-info">
-            <p class="session-title">Engineering Survival — The Stillsuit Problem</p>
-            <p class="session-tagline">"Your body wastes 2 litres of water a day. Can we fix that?"</p>
-          </div>
-          <span class="session-arrow">▼</span>
-        </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> The stillsuit recycles all body moisture including sweat, urine, and breath. Is that even feasible with real materials science?</li>
-              <li><span class="q-num">2.</span> The Fremen's whole culture is shaped by water scarcity. What does that tell us about how environment shapes society?</li>
-              <li><span class="q-num">3.</span> We already have atmospheric water generators that pull water from desert air. Is the stillsuit closer to reality than we think?</li>
-              <li><span class="q-num">4.</span> Spitting in someone's presence is an insult on Arrakis. What physical substances do we consider sacred or taboo — and why?</li>
-              <li><span class="q-num">5.</span> <span class="q-badge fun">Design</span> If you were designing a survival suit for a real desert planet, what three features would you prioritise?</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- S14 -->
-      <div class="session-card reveal">
-        <div class="session-header" onclick="toggleSession(this)">
-          <span class="session-num">14</span>
-          <div class="session-info">
-            <p class="session-title">Prescience, Memory &amp; The Mind</p>
-            <p class="session-tagline">"The spice unlocks something in the brain. What exactly?"</p>
-          </div>
-          <span class="session-arrow">▼</span>
-        </div>
-        <div class="session-body">
-          <div class="session-body-inner">
-            <ul class="questions-list">
-              <li><span class="q-num">1.</span> Prescience in Dune is less about seeing the future and more about seeing probability. Is that a scientific or mystical concept?</li>
-              <li><span class="q-num">2.</span> Spice expands consciousness. Real psychedelics also alter perception of time. Is Herbert describing a real neurological mechanism?</li>
-              <li><span class="q-num">3.</span> The Mentats are human computers, trained to replace AI after the Butlerian Jihad. How much of human cognition could actually be optimised through training?</li>
-              <li><span class="q-num">4.</span> The Tleilaxu use genetic memory — memories passed down through DNA. Is there any real science behind inherited trauma or memory?</li>
-              <li><span class="q-num">5.</span> <span class="q-badge debate">Debate</span> If you could take a substance that made you more intelligent but caused terrible visions of violence — would you?</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /sessions-grid season 2 -->
-  </div>
+    </div><!-- /roadmap-wrapper -->
+  </div><!-- /container -->
 </section>
 
 
@@ -1776,15 +1926,7 @@ navLinks.querySelectorAll('a').forEach(a => {
 });
 
 
-/* ── Session Accordion ──────────────────────────────────────── */
-function toggleSession(header) {
-  const card = header.parentElement;
-  const isOpen = card.classList.contains('open');
-  // Close all
-  document.querySelectorAll('.session-card.open').forEach(c => c.classList.remove('open'));
-  // Open clicked if it was closed
-  if (!isOpen) card.classList.add('open');
-}
+
 
 
 /* ── Scroll Reveal ──────────────────────────────────────────── */
