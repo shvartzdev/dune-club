@@ -128,7 +128,7 @@
         linear-gradient(90deg, rgba(200,162,42,0.025) 1px, transparent 1px);
       background-size: 80px 80px;
     }
-    .arrakis-map-bg { position: absolute; width: clamp(500px,72vw,950px); height: clamp(500px,72vw,950px); left: 50%; top: 22%; transform: translateX(-52%); pointer-events: none; z-index: 0; color: #c8a22a; opacity: 0.052; }
+    .arrakis-map-bg { position: absolute; width: clamp(600px,80vw,1100px); height: clamp(600px,80vw,1100px); left: 50%; top: 12%; transform: translateX(-50%); pointer-events: none; z-index: 0; color: #c8a22a; opacity: 0.055; }
     .roadmap-wrapper { position: relative; max-width: 940px; margin: 0 auto; }
     .roadmap-wrapper::before { content: ''; position: absolute; left: calc(50% - 0.5px); top: 4rem; bottom: 1rem; width: 1px; background: linear-gradient(180deg, transparent 0%, var(--gold-dim) 3%, var(--gold-dim) 97%, transparent 100%); z-index: 0; pointer-events: none; }
     .roadmap-wrapper::after { content: 'ARRAKIS · CANOPUS SYSTEM · DESERT MAP'; position: absolute; top: 0.4rem; right: 0; font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.22em; color: var(--gold); opacity: 0.22; text-transform: uppercase; }
@@ -180,6 +180,10 @@
 
     /* ARRAKIS PLANET */
     .arrakis-planet { position: absolute; width: clamp(340px,52vw,700px); height: clamp(340px,52vw,700px); top: 2%; right: -12%; pointer-events: none; z-index: 0; opacity: 0.82; filter: drop-shadow(0 0 55px rgba(200,100,20,0.28)) drop-shadow(0 0 130px rgba(180,80,10,0.14)); animation: planet-breathe 18s ease-in-out infinite; }
+    /* Mid-section planet (Giedi Prime / Part II) */
+    .sessions-planet-2 { position: absolute; width: clamp(260px,38vw,540px); height: clamp(260px,38vw,540px); top: 40%; left: -9%; pointer-events: none; z-index: 0; opacity: 0.55; filter: drop-shadow(0 0 40px rgba(60,40,90,0.2)) drop-shadow(0 0 90px rgba(50,30,70,0.1)); animation: planet-breathe 22s 3s ease-in-out infinite; }
+    /* Lower planet (Chapterhouse / Part III) */
+    .sessions-planet-3 { position: absolute; width: clamp(220px,30vw,460px); height: clamp(220px,30vw,460px); top: 72%; right: -7%; pointer-events: none; z-index: 0; opacity: 0.5; filter: drop-shadow(0 0 38px rgba(30,70,30,0.22)) drop-shadow(0 0 80px rgba(20,60,20,0.1)); animation: planet-breathe 26s 6s ease-in-out infinite; }
     @keyframes planet-breathe {
       0%,100% { filter: drop-shadow(0 0 55px rgba(200,100,20,0.28)) drop-shadow(0 0 130px rgba(180,80,10,0.14)) brightness(1); }
       50%      { filter: drop-shadow(0 0 70px rgba(210,110,25,0.35)) drop-shadow(0 0 160px rgba(190,90,15,0.18)) brightness(1.1); }
@@ -218,6 +222,13 @@
     .x-mark::after  { height: 1px; width: 100%; top: 50%; transform: translateY(-50%); }
     .cross-inline { display: inline-block; font-size: 0.55rem; color: var(--gold); opacity: 0.4; letter-spacing: 0; margin: 0 0.5rem; vertical-align: middle; }
 
+    /* MAP FRAGMENTS */
+    .rm-map-frag { display: flex; position: relative; z-index: 1; padding: 0.6rem 0 0.2rem; pointer-events: none; }
+    .rm-map-frag.center { justify-content: center; }
+    .rm-map-frag.right  { justify-content: flex-end;   padding-right: 1.4rem; }
+    .rm-map-frag.left   { justify-content: flex-start; padding-left:  1.4rem; }
+    .rm-map-frag svg    { color: var(--gold); opacity: 0.16; }
+
     /* MOBILE */
     @media (max-width: 680px) {
       .roadmap-wrapper::before { left: 20px; }
@@ -233,11 +244,21 @@
       .rm-grammar-right,.rm-grammar-left { grid-column: 2; grid-row: 2; padding: 0 0 1rem 0.9rem !important; justify-content: flex-start; }
       .rm-grammar-right::before,.rm-grammar-left::after { display: none; }
       .grammar-card { max-width: 100%; }
-      .rm-season-row { padding: 2rem 0 1.5rem; }
+      .rm-season-row { padding: 2rem 0 1.5rem; font-size: 0.62rem; }
       .rm-group-zero { align-items: flex-start; padding-left: 48px; }
       .ornithopter-hero,.hero-reticle,.hero-reticle-left { display: none; }
+      /* Hide large bg planets — prevent horizontal overflow */
+      .sessions-planet-2,.sessions-planet-3 { display: none; }
+      .arrakis-planet { right: -30%; opacity: 0.5; width: clamp(240px,75vw,420px); height: clamp(240px,75vw,420px); }
+      #sessions { overflow-x: hidden; }
+      /* Map fragments: center on mobile */
+      .rm-map-frag.right,.rm-map-frag.left { justify-content: center; padding-left: 0; padding-right: 0; }
     }
-    @media (max-width: 500px) { .coord-bar { gap: 0.6rem; } }
+    @media (max-width: 500px) {
+      .coord-bar { gap: 0.6rem; }
+      .hero-actions { flex-direction: column; }
+      .rm-card { padding: 1rem 1rem 1.1rem; }
+    }
   </style>
 </head>
 <body>
@@ -448,6 +469,77 @@
     <circle cx="200" cy="200" r="200" fill="url(#pa)"/>
   </svg>
 
+  <!-- Giedi Prime — Part II background planet -->
+  <svg class="sessions-planet-2" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="sp2g" cx="36%" cy="30%" r="68%">
+        <stop offset="0%"   stop-color="#3a3530"/><stop offset="20%" stop-color="#201c18"/>
+        <stop offset="50%"  stop-color="#100d0a"/><stop offset="100%" stop-color="#050302"/>
+      </radialGradient>
+      <radialGradient id="sp2s" cx="64%" cy="63%" r="50%">
+        <stop offset="0%"   stop-color="rgba(0,0,0,0)"/><stop offset="40%" stop-color="rgba(0,0,0,0.55)"/>
+        <stop offset="100%" stop-color="rgba(0,0,0,0.94)"/>
+      </radialGradient>
+      <radialGradient id="sp2h" cx="30%" cy="25%" r="40%">
+        <stop offset="0%"   stop-color="rgba(160,100,200,0.12)"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </radialGradient>
+      <radialGradient id="sp2a" cx="50%" cy="50%" r="50%">
+        <stop offset="82%" stop-color="transparent"/>
+        <stop offset="87%" stop-color="rgba(90,50,120,0.22)"/>
+        <stop offset="92%" stop-color="rgba(70,30,90,0.08)"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </radialGradient>
+      <pattern id="sp2p" x="0" y="0" width="400" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(15 200 200)">
+        <rect width="400" height="4" y="0" fill="rgba(80,60,40,0.06)"/>
+        <rect width="400" height="3" y="14" fill="rgba(60,40,20,0.04)"/>
+      </pattern>
+      <clipPath id="sp2c"><circle cx="200" cy="200" r="194"/></clipPath>
+    </defs>
+    <circle cx="200" cy="200" r="194" fill="url(#sp2g)"/>
+    <g clip-path="url(#sp2c)"><rect x="0" y="0" width="400" height="400" fill="url(#sp2p)"/></g>
+    <circle cx="200" cy="200" r="194" fill="url(#sp2s)"/>
+    <circle cx="200" cy="200" r="194" fill="url(#sp2h)"/>
+    <circle cx="200" cy="200" r="200" fill="url(#sp2a)"/>
+  </svg>
+
+  <!-- Chapterhouse — Part III background planet -->
+  <svg class="sessions-planet-3" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="sp3g" cx="35%" cy="28%" r="68%">
+        <stop offset="0%"   stop-color="#1e5020"/><stop offset="25%" stop-color="#12331a"/>
+        <stop offset="55%"  stop-color="#0a1e0c"/><stop offset="100%" stop-color="#030804"/>
+      </radialGradient>
+      <radialGradient id="sp3s" cx="65%" cy="64%" r="50%">
+        <stop offset="0%"   stop-color="rgba(0,0,0,0)"/><stop offset="42%" stop-color="rgba(0,0,0,0.52)"/>
+        <stop offset="100%" stop-color="rgba(0,0,0,0.92)"/>
+      </radialGradient>
+      <radialGradient id="sp3h" cx="29%" cy="24%" r="42%">
+        <stop offset="0%"   stop-color="rgba(100,210,100,0.10)"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </radialGradient>
+      <radialGradient id="sp3a" cx="50%" cy="50%" r="50%">
+        <stop offset="82%" stop-color="transparent"/>
+        <stop offset="86%" stop-color="rgba(50,120,50,0.25)"/>
+        <stop offset="91%" stop-color="rgba(180,80,20,0.08)"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </radialGradient>
+      <pattern id="sp3p" x="0" y="0" width="400" height="34" patternUnits="userSpaceOnUse" patternTransform="rotate(-18 200 200)">
+        <rect width="400" height="6"  y="0"  fill="rgba(60,140,60,0.07)"/>
+        <rect width="400" height="4"  y="18" fill="rgba(40,100,40,0.05)"/>
+      </pattern>
+      <clipPath id="sp3c"><circle cx="200" cy="200" r="194"/></clipPath>
+    </defs>
+    <circle cx="200" cy="200" r="194" fill="url(#sp3g)"/>
+    <g clip-path="url(#sp3c)">
+      <rect x="0" y="0" width="400" height="400" fill="url(#sp3p)"/>
+      <ellipse cx="200" cy="30" rx="70" ry="22" fill="rgba(180,230,180,0.05)"/>
+    </g>
+    <circle cx="200" cy="200" r="194" fill="url(#sp3s)"/>
+    <circle cx="200" cy="200" r="194" fill="url(#sp3h)"/>
+    <circle cx="200" cy="200" r="200" fill="url(#sp3a)"/>
+  </svg>
+
   <!-- Arrakis map background -->
   <svg class="arrakis-map-bg" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor">
     <circle cx="400" cy="400" r="380" stroke-width="0.6"/>
@@ -634,6 +726,25 @@
         </div>
       </div>
 
+      <!-- MAP FRAGMENT 1 — Habbanya Erg / Western Territories -->
+      <div class="rm-map-frag center">
+        <svg width="360" height="150" viewBox="0 0 360 150" fill="none" stroke="currentColor" stroke-width="0.7" xmlns="http://www.w3.org/2000/svg">
+          <path d="M360,150 A200,200 0 0,0 160,0" opacity="0.6"/>
+          <path d="M360,150 A155,155 0 0,0 205,0" opacity="0.5"/>
+          <path d="M360,150 A245,245 0 0,0 115,0" opacity="0.4"/>
+          <line x1="360" y1="150" x2="115" y2="0" opacity="0.35"/>
+          <line x1="360" y1="150" x2="205" y2="0" opacity="0.35"/>
+          <line x1="360" y1="150" x2="290" y2="0" opacity="0.28"/>
+          <path d="M35,82 C75,62 128,46 182,43 C236,40 284,53 322,76" stroke-width="1.1"/>
+          <path d="M18,108 C58,90 115,73 168,70 C218,67 268,79 312,100" stroke-width="0.75" stroke-dasharray="5,3"/>
+          <text x="88" y="63" font-family="'Cinzel',serif" font-size="7.5" fill="currentColor" letter-spacing="0.12em">HABBANYA ERG</text>
+          <text x="52" y="114" font-family="'Cinzel',serif" font-size="5.5" fill="currentColor" letter-spacing="0.1em" opacity="0.65">· WESTERN TERRITORIES ·</text>
+          <circle cx="182" cy="43" r="2.5" fill="currentColor" opacity="0.6"/>
+          <circle cx="322" cy="76" r="2" fill="currentColor" opacity="0.5"/>
+          <text x="308" y="140" font-family="'Cinzel',serif" font-size="5" fill="currentColor" letter-spacing="0.12em" opacity="0.5">34°S · 119°W</text>
+        </svg>
+      </div>
+
       <!-- PART II -->
       <div class="rm-season-row">
         <svg class="rm-orn-icon" width="28" height="14" viewBox="0 0 300 150" fill="none" stroke="currentColor"><path d="M150,20 C154,22 158,38 158,75 C158,108 154,126 150,128 C146,126 142,108 142,75 C142,38 146,22 150,20 Z" stroke-width="1"/><path d="M143,52 C118,43 78,28 18,36" stroke-width="1.5"/><path d="M157,52 C182,43 222,28 282,36" stroke-width="1.5"/><path d="M143,86 C118,90 76,98 18,108" stroke-width="1.5"/><path d="M157,86 C182,90 224,98 282,108" stroke-width="1.5"/></svg>
@@ -748,6 +859,28 @@
         </div>
       </div>
 
+      <!-- MAP FRAGMENT 2 — The Funeral Plain / Central Arrakis -->
+      <div class="rm-map-frag right">
+        <svg width="300" height="140" viewBox="0 0 300 140" fill="none" stroke="currentColor" stroke-width="0.7" xmlns="http://www.w3.org/2000/svg">
+          <line x1="150" y1="0" x2="150" y2="140" stroke-dasharray="3,4" opacity="0.4"/>
+          <line x1="0" y1="70" x2="300" y2="70" stroke-dasharray="3,4" opacity="0.4"/>
+          <circle cx="150" cy="70" r="50" stroke-dasharray="6,4" opacity="0.5"/>
+          <circle cx="150" cy="70" r="82" stroke-dasharray="6,4" opacity="0.4"/>
+          <circle cx="150" cy="70" r="115" stroke-dasharray="5,5" opacity="0.3"/>
+          <path d="M55,28 C92,17 136,15 168,21 C198,27 228,41 248,58" stroke-width="1.1"/>
+          <path d="M38,90 C78,78 128,72 162,74 C196,76 228,86 258,100" stroke-width="0.75" stroke-dasharray="4,3"/>
+          <circle cx="150" cy="70" r="3.5" fill="currentColor" opacity="0.7"/>
+          <line x1="142" y1="70" x2="158" y2="70" stroke-width="1.1" opacity="0.7"/>
+          <line x1="150" y1="62" x2="150" y2="78" stroke-width="1.1" opacity="0.7"/>
+          <text x="50" y="42" font-family="'Cinzel',serif" font-size="7" fill="currentColor" letter-spacing="0.12em">THE FUNERAL PLAIN</text>
+          <circle cx="170" cy="52" r="2" fill="currentColor" opacity="0.6"/>
+          <text x="178" y="56" font-family="'Cinzel',serif" font-size="5.5" fill="currentColor" letter-spacing="0.08em" opacity="0.65">SIETCH TABR</text>
+          <path d="M120,21 l3,-3 l3,3 l-3,3 Z" fill="currentColor" opacity="0.5"/>
+          <path d="M248,58 l3,-3 l3,3 l-3,3 Z" fill="currentColor" opacity="0.5"/>
+          <text x="175" y="130" font-family="'Cinzel',serif" font-size="5" fill="currentColor" letter-spacing="0.12em" opacity="0.5">17°N · 2°E</text>
+        </svg>
+      </div>
+
       <!-- PART III -->
       <div class="rm-season-row">
         <svg class="rm-orn-icon" width="28" height="14" viewBox="0 0 300 150" fill="none" stroke="currentColor"><path d="M150,20 C154,22 158,38 158,75 C158,108 154,126 150,128 C146,126 142,108 142,75 C142,38 146,22 150,20 Z" stroke-width="1"/><path d="M143,52 C118,43 78,28 18,36" stroke-width="1.5"/><path d="M157,52 C182,43 222,28 282,36" stroke-width="1.5"/><path d="M143,86 C118,90 76,98 18,108" stroke-width="1.5"/><path d="M157,86 C182,90 224,98 282,108" stroke-width="1.5"/></svg>
@@ -857,6 +990,27 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- MAP FRAGMENT 3 — Deep Desert / Arrakeen -->
+      <div class="rm-map-frag left">
+        <svg width="340" height="130" viewBox="0 0 340 130" fill="none" stroke="currentColor" stroke-width="0.7" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,0 A225,225 0 0,1 340,82" opacity="0.4"/>
+          <path d="M0,0 A172,172 0 0,1 280,93" opacity="0.35"/>
+          <path d="M0,0 A268,268 0 0,1 310,130" opacity="0.28"/>
+          <line x1="0" y1="0" x2="340" y2="82" opacity="0.3"/>
+          <line x1="0" y1="0" x2="280" y2="93" opacity="0.3"/>
+          <line x1="0" y1="0" x2="215" y2="130" opacity="0.25"/>
+          <path d="M75,28 C118,16 175,13 222,19 C262,25 293,44 308,70" stroke-width="1.2"/>
+          <path d="M55,66 C98,53 158,48 202,54 C242,60 278,76 298,100" stroke-width="0.75" stroke-dasharray="5,3"/>
+          <rect x="216" y="16" width="5" height="5" fill="none" stroke="currentColor" stroke-width="1" opacity="0.7"/>
+          <text x="226" y="23" font-family="'Cinzel',serif" font-size="5.5" fill="currentColor" letter-spacing="0.08em" opacity="0.8">ARRAKEEN</text>
+          <circle cx="176" cy="52" r="2" fill="currentColor" opacity="0.6"/>
+          <text x="183" y="56" font-family="'Cinzel',serif" font-size="5" fill="currentColor" letter-spacing="0.07em" opacity="0.6">SIETCH TABR</text>
+          <text x="68" y="88" font-family="'Cinzel',serif" font-size="7.5" fill="currentColor" letter-spacing="0.14em">DEEP DESERT · ARRAKIS</text>
+          <rect x="8" y="106" width="165" height="17" stroke-width="0.5" opacity="0.35"/>
+          <text x="16" y="117" font-family="'Cinzel',serif" font-size="4.8" fill="currentColor" letter-spacing="0.09em" opacity="0.5">IMPERIAL CARTOGRAPHY · YEAR 10191</text>
+        </svg>
       </div>
 
       <!-- ONWARDS -->
