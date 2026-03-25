@@ -24,7 +24,7 @@
       --border-hover:rgba(200,162,42,0.55);
       --r:           6px;
     }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body { background: var(--bg-solid); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; overflow-x: hidden; }
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg-solid); }
@@ -98,7 +98,7 @@
     .stats-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin: 3rem 0 0; }
     .stat-item { background: var(--card); padding: 1.6rem 1.2rem; text-align: center; }
     .stat-item:not(:last-child) { border-right: 1px solid var(--border); }
-    .stat-num { font-family: 'Cinzel', serif; font-size: clamp(1.6rem,4vw,2.4rem); font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 0.4rem; }
+    .stat-num { font-family: 'Cinzel', serif; font-size: clamp(1.6rem,4vw,2.4rem); font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 0.4rem; white-space: nowrap; }
     .stat-label { font-family: 'Cormorant Garamond', serif; font-size: 0.85rem; color: var(--text-muted); letter-spacing: 0.05em; }
     .bracket-card { position: relative; }
     .bracket-card::before,.bracket-card::after { content: ''; position: absolute; width: 13px; height: 13px; border-color: var(--gold-dim); border-style: solid; pointer-events: none; z-index: 2; transition: border-color 0.25s; }
@@ -189,6 +189,56 @@
       50%      { filter: drop-shadow(0 0 70px rgba(210,110,25,0.35)) drop-shadow(0 0 160px rgba(190,90,15,0.18)) brightness(1.1); }
     }
 
+    /* TIMELINE */
+    #timeline { background: #090704; padding-bottom: 0; }
+    .tl-outer { overflow-x: auto; padding: 1rem clamp(1.2rem,5vw,3rem) 4rem; -webkit-overflow-scrolling: touch; }
+    .tl-outer::-webkit-scrollbar { height: 4px; }
+    .tl-outer::-webkit-scrollbar-track { background: rgba(200,162,42,0.05); }
+    .tl-outer::-webkit-scrollbar-thumb { background: rgba(200,162,42,0.25); border-radius: 2px; }
+    .tl-track { display: flex; align-items: flex-start; min-width: max-content; gap: 0; position: relative; padding-top: 0.5rem; }
+    /* Horizontal spine line */
+    .tl-track::before { content: ''; position: absolute; left: 0; right: 0; top: 2.8rem; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dim) 4%, var(--gold-dim) 96%, transparent); pointer-events: none; z-index: 0; }
+    /* Columns */
+    .tl-col { display: flex; flex-direction: column; padding: 0 1.8rem; position: relative; }
+    .tl-prehistory { min-width: 260px; max-width: 280px; }
+    .tl-books-123 { min-width: 580px; border-left: 1px solid rgba(200,162,42,0.12); border-right: 1px solid rgba(200,162,42,0.12); background: rgba(200,162,42,0.025); }
+    .tl-book-4-col { min-width: 260px; }
+    .tl-books-56 { min-width: 420px; }
+    .tl-col-label { font-family: 'Cinzel',serif; font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); opacity: 0.55; margin-bottom: 2rem; padding-top: 0.1rem; white-space: nowrap; }
+    .tl-zoom-note { font-family: 'Inter',sans-serif; font-size: 0.52rem; letter-spacing: 0.08em; color: var(--gold); opacity: 0.5; margin-left: 0.4rem; font-weight: 400; }
+    /* Events in pre-history column */
+    .tl-event { position: relative; padding-left: 1.1rem; margin-bottom: 1.4rem; }
+    .tl-dot { position: absolute; left: -4px; top: 0.35rem; width: 8px; height: 8px; border-radius: 50%; background: var(--bg-solid); border: 1px solid var(--gold-dim); z-index: 2; }
+    .tl-dot-major { width: 11px; height: 11px; left: -5.5px; border-color: var(--gold); background: var(--bg-solid); box-shadow: 0 0 8px rgba(200,162,42,0.3); }
+    .tl-ev-year { font-family: 'Cinzel',serif; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.25rem; }
+    .tl-ev-text { font-family: 'Cormorant Garamond',serif; font-size: 0.9rem; color: var(--text-muted); line-height: 1.55; max-width: 230px; }
+    .tl-spacer { height: 1.4rem; position: relative; }
+    .tl-spacer::before { content: '·  ·  ·'; position: absolute; left: 0.3rem; top: 50%; transform: translateY(-50%); font-size: 0.5rem; color: var(--gold); opacity: 0.3; letter-spacing: 0.3em; }
+    /* Gap columns */
+    .tl-gap-col { display: flex; flex-direction: column; align-items: center; padding: 2.5rem 1rem 0; min-width: 90px; }
+    .tl-gap-large { min-width: 110px; }
+    .tl-gap-bar { width: 1px; flex: 1; min-height: 180px; background: repeating-linear-gradient(180deg, var(--gold-dim) 0, var(--gold-dim) 4px, transparent 4px, transparent 9px); }
+    .tl-gap-label { font-family: 'Cinzel',serif; font-size: 0.52rem; letter-spacing: 0.09em; color: var(--gold); opacity: 0.5; text-align: center; margin-top: 0.7rem; line-height: 1.6; white-space: nowrap; }
+    /* Book blocks */
+    .tl-book-block { border: 1px solid var(--border); border-radius: var(--r); padding: 0.9rem 1.1rem 1rem; margin-bottom: 0.6rem; background: var(--card); position: relative; }
+    .tl-book-block::before { content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dim), transparent); }
+    .tl-book-1 { border-color: rgba(200,162,42,0.28); }
+    .tl-book-2 { border-color: rgba(200,162,42,0.22); }
+    .tl-book-3 { border-color: rgba(200,162,42,0.18); }
+    .tl-book-4 { border-color: rgba(180,100,20,0.28); min-width: 240px; }
+    .tl-book-5,.tl-book-6 { border-color: rgba(80,120,160,0.25); }
+    .tl-book-year { font-family: 'Cinzel',serif; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.3rem; opacity: 0.8; }
+    .tl-book-badge { font-family: 'Cinzel',serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; color: var(--text); margin-bottom: 0.6rem; }
+    .tl-book-events { list-style: none; display: flex; flex-direction: column; gap: 0.28rem; }
+    .tl-book-events li { font-family: 'Cormorant Garamond',serif; font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; display: flex; gap: 0.4rem; align-items: baseline; }
+    .tl-book-events li::before { content: '·'; color: var(--gold); opacity: 0.5; flex-shrink: 0; }
+    .tl-book-gap { font-family: 'Cinzel',serif; font-size: 0.55rem; letter-spacing: 0.12em; color: var(--gold); opacity: 0.45; text-align: center; padding: 0.4rem 0; }
+    @media (max-width: 680px) {
+      .tl-outer { padding: 0.5rem 0.8rem 2.5rem; }
+      .tl-col { padding: 0 1.2rem; }
+      .tl-books-123 { min-width: 460px; }
+    }
+
     /* FILMS */
     #films { background: #0d0b07; position: relative; overflow: visible; }
     .ghost-planet { position: absolute; width: clamp(200px,30vw,420px); height: clamp(200px,30vw,420px); bottom: -10%; left: -5%; pointer-events: none; z-index: 0; opacity: 0.45; filter: drop-shadow(0 0 40px rgba(80,130,200,0.18)); animation: planet-breathe 24s 4s ease-in-out infinite; }
@@ -223,11 +273,8 @@
     .cross-inline { display: inline-block; font-size: 0.55rem; color: var(--gold); opacity: 0.4; letter-spacing: 0; margin: 0 0.5rem; vertical-align: middle; }
 
     /* MAP FRAGMENTS */
-    .rm-map-frag { display: flex; position: relative; z-index: 1; padding: 0.6rem 0 0.2rem; pointer-events: none; }
-    .rm-map-frag.center { justify-content: center; }
-    .rm-map-frag.right  { justify-content: flex-end;   padding-right: 1.4rem; }
-    .rm-map-frag.left   { justify-content: flex-start; padding-left:  1.4rem; }
-    .rm-map-frag svg    { color: var(--gold); opacity: 0.16; }
+    .rm-map-frag { position: relative; z-index: 1; padding: 1.2rem 0 0.8rem; pointer-events: none; overflow: hidden; }
+    .rm-map-frag svg { color: var(--gold); opacity: 0.24; width: 100%; height: auto; display: block; }
 
     /* MOBILE */
     @media (max-width: 680px) {
@@ -251,8 +298,8 @@
       .sessions-planet-2,.sessions-planet-3 { display: none; }
       .arrakis-planet { right: -30%; opacity: 0.5; width: clamp(240px,75vw,420px); height: clamp(240px,75vw,420px); }
       #sessions { overflow-x: hidden; }
-      /* Map fragments: center on mobile */
-      .rm-map-frag.right,.rm-map-frag.left { justify-content: center; padding-left: 0; padding-right: 0; }
+      /* Map fragments: compress on mobile */
+      .rm-map-frag { padding: 0.6rem 0 0.4rem; }
     }
     @media (max-width: 500px) {
       .coord-bar { gap: 0.6rem; }
@@ -270,6 +317,7 @@
   <ul class="nav-links" id="navLinks">
     <li><a href="#about">About</a></li>
     <li><a href="#sessions">Sessions</a></li>
+    <li><a href="#timeline">Timeline</a></li>
     <li><a href="#films">Adaptations</a></li>
   </ul>
   <div class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></div>
@@ -596,10 +644,10 @@
             </div>
           </div>
           <ul class="rm-questions">
-            <li><span class="rm-qnum">1.</span> Frank Herbert wrote 6 novels (1965–1985). After his death, his son Brian Herbert and Kevin J. Anderson wrote 20+ more. What makes a series "canonical"? Does it matter who writes it?</li>
-            <li><span class="rm-qnum">2.</span> The universe spans ~25,000 years: from the Butlerian Jihad (destruction of thinking machines) to centuries after Chapterhouse. What draws you to this era — the ancient past, Paul's time, or the far future?</li>
-            <li><span class="rm-qnum">3.</span> Why start with Book 1 and not the prequels? What's the risk of beginning at the very beginning?</li>
-            <li><span class="rm-qnum">4.</span> Dune is often called "the Lord of the Rings of science fiction." What creates these canonical must-reads — and why does Dune keep getting adapted?</li>
+            <li><span class="rm-qnum">1.</span> Does it matter who writes it? Frank Herbert built the universe; his son extended it across twenty more novels. Is there one Dune — or two?</li>
+            <li><span class="rm-qnum">2.</span> If you could only read one era of the 25,000-year timeline, which would you choose — and what does that choice reveal about what you're actually looking for in the series?</li>
+            <li><span class="rm-qnum">3.</span> Is starting with Book 1 the right move — or does treating the prequels as optional shortchange the universe from the beginning?</li>
+            <li><span class="rm-qnum">4.</span> Why does Dune resist adaptation so stubbornly — and why do we keep trying?</li>
             <li><span class="rm-qnum">5.</span> <span class="q-badge hot">Hot Take</span> "The Brian Herbert sequels are a betrayal of the original vision. The Dune universe should have ended with Chapterhouse."</li>
           </ul>
           <div class="rm-science-block">
@@ -620,6 +668,35 @@
         <svg class="rm-orn-icon" width="28" height="14" viewBox="0 0 300 150" fill="none" stroke="currentColor"><path d="M150,20 C154,22 158,38 158,75 C158,108 154,126 150,128 C146,126 142,108 142,75 C142,38 146,22 150,20 Z" stroke-width="1"/><path d="M143,52 C118,43 78,28 18,36" stroke-width="1.5"/><path d="M157,52 C182,43 222,28 282,36" stroke-width="1.5"/><path d="M143,86 C118,90 76,98 18,108" stroke-width="1.5"/><path d="M157,86 C182,90 224,98 282,108" stroke-width="1.5"/></svg>
       </div>
 
+      <!-- MAP FRAGMENT 1 — Habbanya Erg / Western Territories -->
+      <div class="rm-map-frag">
+        <svg viewBox="0 0 900 240" fill="none" stroke="currentColor" stroke-width="0.8" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,72 C50,58 115,44 200,37 C295,29 400,26 505,31 C600,36 685,48 762,64 C818,76 868,92 900,104 L900,240 L0,240 Z" fill="currentColor" opacity="0.07" stroke="none"/>
+          <path d="M0,72 C50,58 115,44 200,37 C295,29 400,26 505,31 C600,36 685,48 762,64 C818,76 868,92 900,104" stroke-width="1.5"/>
+          <path d="M265,32 C272,58 275,92 270,132 C265,170 255,200 244,235" stroke-width="0.7" stroke-dasharray="7,4" opacity="0.65"/>
+          <path d="M588,32 C596,58 598,92 593,132 C588,170 575,202 562,235" stroke-width="0.7" stroke-dasharray="7,4" opacity="0.55"/>
+          <path d="M42,105 C62,99 84,102 104,98 C122,94 140,98 158,94" stroke-width="0.8" opacity="0.7"/>
+          <path d="M36,120 C57,114 80,117 102,113 C122,109 142,113 162,109" stroke-width="0.65" opacity="0.58"/>
+          <path d="M40,135 C60,129 82,132 105,128 C126,124 147,128 168,124" stroke-width="0.55" opacity="0.45"/>
+          <path d="M44,150 C64,144 86,147 108,143 C130,139 150,143 170,139" stroke-width="0.45" opacity="0.35"/>
+          <path d="M300,60 C340,57 382,57 420,60" stroke-width="0.7" opacity="0.6"/>
+          <path d="M296,74 C338,71 380,71 418,74" stroke-width="0.6" opacity="0.5"/>
+          <path d="M298,88 C338,85 380,85 416,88" stroke-width="0.5" opacity="0.38"/>
+          <path d="M618,46 C645,41 670,40 694,44" stroke-width="0.75" opacity="0.6"/>
+          <path d="M614,59 C642,54 668,53 695,57" stroke-width="0.65" opacity="0.5"/>
+          <circle cx="165" cy="115" r="2.5" fill="currentColor" opacity="0.72"/>
+          <circle cx="420" cy="102" r="2.5" fill="currentColor" opacity="0.65"/>
+          <text x="40" y="185" font-family="'Cinzel',serif" font-size="12" fill="currentColor" letter-spacing="0.14em">HABBANYA ERG</text>
+          <text x="300" y="122" font-family="'Cinzel',serif" font-size="9.5" fill="currentColor" letter-spacing="0.11em" opacity="0.78">THE GREAT FLAT</text>
+          <text x="600" y="108" font-family="'Cinzel',serif" font-size="8.5" fill="currentColor" letter-spacing="0.09em" opacity="0.65">WIND PASSAGE</text>
+          <line x1="700" y1="216" x2="860" y2="216" stroke-width="0.8" opacity="0.38"/>
+          <line x1="700" y1="211" x2="700" y2="221" stroke-width="0.8" opacity="0.38"/>
+          <line x1="860" y1="211" x2="860" y2="221" stroke-width="0.8" opacity="0.38"/>
+          <text x="752" y="232" font-family="'Cinzel',serif" font-size="6.5" fill="currentColor" opacity="0.35" letter-spacing="0.08em">500 km</text>
+          <text x="14" y="232" font-family="'Cinzel',serif" font-size="6.5" fill="currentColor" opacity="0.38" letter-spacing="0.09em">34°S · 119°W — WESTERN ARRAKIS</text>
+        </svg>
+      </div>
+
       <!-- SESSION 1 — LEFT -->
       <div class="rm-session-group reveal">
         <div class="rm-left-col">
@@ -632,10 +709,10 @@
               </div>
             </div>
             <ul class="rm-questions">
-              <li><span class="rm-qnum">1.</span> Paul is trained simultaneously in Bene Gesserit awareness, Mentat logic, and Fremen survival. What makes this convergence so dangerous — and is a "perfect hero" actually heroic?</li>
-              <li><span class="rm-qnum">2.</span> The spice controls space travel, consciousness, and political power — all through a single substance produced by one planet. How does Herbert use ecology as a metaphor for geopolitics?</li>
-              <li><span class="rm-qnum">3.</span> The Fremen religion was engineered centuries earlier by the Bene Gesserit Missionaria Protectiva. What does it mean when faith is a manufactured tool?</li>
-              <li><span class="rm-qnum">4.</span> Lady Jessica breaks the Sisterhood's rule by having a son — and inadvertently changes galactic history. When does individual love justify systemic consequences?</li>
+              <li><span class="rm-qnum">1.</span> If Paul was engineered before birth to be a Messiah — is there any moment in the novel where he is genuinely free?</li>
+              <li><span class="rm-qnum">2.</span> Replace "spice" with "oil" throughout Dune: does anything change? What does your answer tell you about the book?</li>
+              <li><span class="rm-qnum">3.</span> The Fremen's faith in their Mahdi was planted by the Bene Gesserit centuries before Paul arrived. Does that make Paul a fraud — or does it make all faith a fraud?</li>
+              <li><span class="rm-qnum">4.</span> Lady Jessica chose love over the Sisterhood and accidentally created a god. Was she right?</li>
               <li><span class="rm-qnum">5.</span> <span class="q-badge hot">Hot Take</span> "Dune is a critique of messianic leadership, not a celebration of it. Paul is the villain of his own story."</li>
             </ul>
             <div class="rm-science-block">
@@ -708,10 +785,10 @@
               </div>
             </div>
             <ul class="rm-questions">
-              <li><span class="rm-qnum">1.</span> Paul is now Emperor and a god-figure — yet he is a prisoner of his own prescience, trapped in a future he can see but cannot change. Is omniscience a gift or the ultimate cage?</li>
-              <li><span class="rm-qnum">2.</span> The Jihad killed 61 billion people "in Paul's name." Can a leader be morally responsible for violence committed by followers who believe in him?</li>
-              <li><span class="rm-qnum">3.</span> The conspiracy (Tleilaxu + Bene Gesserit + Spacing Guild + dissident Fremen) uses Paul's love for Chani as its weapon. Why is love always the leverage point?</li>
-              <li><span class="rm-qnum">4.</span> Paul ultimately chooses blindness and exile over ruling by violence. The Fremen see this as weakness. Who is right?</li>
+              <li><span class="rm-qnum">1.</span> Paul can see every moment of his future — and cannot change any of it. Would you want that, or is ignorance the only real freedom?</li>
+              <li><span class="rm-qnum">2.</span> Sixty-one billion people died in Paul's name. He didn't order it. How much of that is his responsibility?</li>
+              <li><span class="rm-qnum">3.</span> The conspirators use Paul's love for Chani as their primary weapon against him. Is love always a vulnerability in power — or only when you try to hide it?</li>
+              <li><span class="rm-qnum">4.</span> Paul walks into the desert blind and leaves the empire to his children. The Fremen call it weakness. Is he right or are they?</li>
               <li><span class="rm-qnum">5.</span> <span class="q-badge hot">Hot Take</span> "Dune Messiah is an anti-sequel — Herbert deliberately destroys everything readers loved about the first book."</li>
             </ul>
             <div class="rm-science-block">
@@ -724,25 +801,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- MAP FRAGMENT 1 — Habbanya Erg / Western Territories -->
-      <div class="rm-map-frag center">
-        <svg width="360" height="150" viewBox="0 0 360 150" fill="none" stroke="currentColor" stroke-width="0.7" xmlns="http://www.w3.org/2000/svg">
-          <path d="M360,150 A200,200 0 0,0 160,0" opacity="0.6"/>
-          <path d="M360,150 A155,155 0 0,0 205,0" opacity="0.5"/>
-          <path d="M360,150 A245,245 0 0,0 115,0" opacity="0.4"/>
-          <line x1="360" y1="150" x2="115" y2="0" opacity="0.35"/>
-          <line x1="360" y1="150" x2="205" y2="0" opacity="0.35"/>
-          <line x1="360" y1="150" x2="290" y2="0" opacity="0.28"/>
-          <path d="M35,82 C75,62 128,46 182,43 C236,40 284,53 322,76" stroke-width="1.1"/>
-          <path d="M18,108 C58,90 115,73 168,70 C218,67 268,79 312,100" stroke-width="0.75" stroke-dasharray="5,3"/>
-          <text x="88" y="63" font-family="'Cinzel',serif" font-size="7.5" fill="currentColor" letter-spacing="0.12em">HABBANYA ERG</text>
-          <text x="52" y="114" font-family="'Cinzel',serif" font-size="5.5" fill="currentColor" letter-spacing="0.1em" opacity="0.65">· WESTERN TERRITORIES ·</text>
-          <circle cx="182" cy="43" r="2.5" fill="currentColor" opacity="0.6"/>
-          <circle cx="322" cy="76" r="2" fill="currentColor" opacity="0.5"/>
-          <text x="308" y="140" font-family="'Cinzel',serif" font-size="5" fill="currentColor" letter-spacing="0.12em" opacity="0.5">34°S · 119°W</text>
-        </svg>
       </div>
 
       <!-- PART II -->
@@ -764,10 +822,10 @@
               </div>
             </div>
             <ul class="rm-questions">
-              <li><span class="rm-qnum">1.</span> Leto II accepts physical transformation — merging with sandworm larvae, becoming immortal and inhuman — to save humanity from extinction. Is this the ultimate sacrifice, or the ultimate power grab?</li>
-              <li><span class="rm-qnum">2.</span> Arrakis is being terraformed — the desert is slowly disappearing. The Fremen must choose between their identity and ecological survival. Can a culture survive radical adaptation?</li>
-              <li><span class="rm-qnum">3.</span> Alia, conscious in the womb due to spice exposure, is eventually possessed by the Baron Harkonnen's persona from her genetic memory. Victim or agent of her own fate?</li>
-              <li><span class="rm-qnum">4.</span> Ghanima and Leto II carry the memories of thousands of ancestors in direct experience. If you had access to all of human history as lived memory — would it be wisdom or madness?</li>
+              <li><span class="rm-qnum">1.</span> Would you stop being human in order to save humanity? And does your answer change if you were told the transformation would take 3,500 years?</li>
+              <li><span class="rm-qnum">2.</span> Terraforming Arrakis destroys the Fremen way of life. Is it possible to save a people by erasing the conditions that made them who they are?</li>
+              <li><span class="rm-qnum">3.</span> Alia was conscious before she was born and is eventually possessed by her dead grandfather. Is she a victim — or did she open the door herself?</li>
+              <li><span class="rm-qnum">4.</span> You carry the direct lived memories of every ancestor — not as stories, but as experience. Is that wisdom or madness — and where does the line sit?</li>
               <li><span class="rm-qnum">5.</span> <span class="q-badge hot">Hot Take</span> "The Golden Path is just another form of tyranny — Leto II is Herbert's most honest villain."</li>
             </ul>
             <div class="rm-science-block">
@@ -841,10 +899,10 @@
               </div>
             </div>
             <ul class="rm-questions">
-              <li><span class="rm-qnum">1.</span> Leto II has ruled as a worm-human hybrid for 3,500 years — deliberately cruel and tyrannical — to force humanity to "hunger for freedom." Can generational suffering be justified by a distant utopia?</li>
-              <li><span class="rm-qnum">2.</span> He contains the direct memories of every human ancestor. At what point does accumulated memory become an entirely new entity? Is Leto II still "human" in any meaningful sense?</li>
-              <li><span class="rm-qnum">3.</span> The Ixians create the no-room — a space invisible to prescience. Why is invisibility to prophecy more dangerous than any weapon?</li>
-              <li><span class="rm-qnum">4.</span> Siona's genetic change makes her descendants invisible to prescience — Leto's ultimate gift to humanity. Is freedom from the future always desirable?</li>
+              <li><span class="rm-qnum">1.</span> Is Leto II the most moral character in the entire series — or its greatest villain? Can the same act be both?</li>
+              <li><span class="rm-qnum">2.</span> At what point does accumulated memory stop being a person and become something else entirely? Is Leto II still human in any meaningful sense?</li>
+              <li><span class="rm-qnum">3.</span> A device that makes you invisible to all prophecy and prescience — is that the most dangerous weapon in the Dune universe, and would you use it?</li>
+              <li><span class="rm-qnum">4.</span> Leto's final gift to humanity is that his descendants can never be seen by any prescient mind. Is freedom from the future always something worth wanting?</li>
               <li><span class="rm-qnum">5.</span> <span class="q-badge hot">Hot Take</span> "God Emperor is unreadable — Herbert sacrificed narrative for philosophy. It's the weakest book of the six."</li>
             </ul>
             <div class="rm-science-block">
@@ -860,24 +918,42 @@
       </div>
 
       <!-- MAP FRAGMENT 2 — The Funeral Plain / Central Arrakis -->
-      <div class="rm-map-frag right">
-        <svg width="300" height="140" viewBox="0 0 300 140" fill="none" stroke="currentColor" stroke-width="0.7" xmlns="http://www.w3.org/2000/svg">
-          <line x1="150" y1="0" x2="150" y2="140" stroke-dasharray="3,4" opacity="0.4"/>
-          <line x1="0" y1="70" x2="300" y2="70" stroke-dasharray="3,4" opacity="0.4"/>
-          <circle cx="150" cy="70" r="50" stroke-dasharray="6,4" opacity="0.5"/>
-          <circle cx="150" cy="70" r="82" stroke-dasharray="6,4" opacity="0.4"/>
-          <circle cx="150" cy="70" r="115" stroke-dasharray="5,5" opacity="0.3"/>
-          <path d="M55,28 C92,17 136,15 168,21 C198,27 228,41 248,58" stroke-width="1.1"/>
-          <path d="M38,90 C78,78 128,72 162,74 C196,76 228,86 258,100" stroke-width="0.75" stroke-dasharray="4,3"/>
-          <circle cx="150" cy="70" r="3.5" fill="currentColor" opacity="0.7"/>
-          <line x1="142" y1="70" x2="158" y2="70" stroke-width="1.1" opacity="0.7"/>
-          <line x1="150" y1="62" x2="150" y2="78" stroke-width="1.1" opacity="0.7"/>
-          <text x="50" y="42" font-family="'Cinzel',serif" font-size="7" fill="currentColor" letter-spacing="0.12em">THE FUNERAL PLAIN</text>
-          <circle cx="170" cy="52" r="2" fill="currentColor" opacity="0.6"/>
-          <text x="178" y="56" font-family="'Cinzel',serif" font-size="5.5" fill="currentColor" letter-spacing="0.08em" opacity="0.65">SIETCH TABR</text>
-          <path d="M120,21 l3,-3 l3,3 l-3,3 Z" fill="currentColor" opacity="0.5"/>
-          <path d="M248,58 l3,-3 l3,3 l-3,3 Z" fill="currentColor" opacity="0.5"/>
-          <text x="175" y="130" font-family="'Cinzel',serif" font-size="5" fill="currentColor" letter-spacing="0.12em" opacity="0.5">17°N · 2°E</text>
+      <div class="rm-map-frag">
+        <svg viewBox="0 0 900 240" fill="none" stroke="currentColor" stroke-width="0.7" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <!-- Territory fill — central basin of Arrakis -->
+          <path d="M0,48 C80,34 185,24 310,20 C435,16 560,18 680,26 C775,33 848,45 900,60 L900,240 L0,240 Z" fill="currentColor" opacity="0.07" stroke="none"/>
+          <!-- Main territory boundary (The Funeral Plain region) -->
+          <path d="M0,48 C80,34 185,24 310,20 C435,16 560,18 680,26 C775,33 848,45 900,60" stroke-width="1.5"/>
+          <!-- Inner sub-region boundary west -->
+          <path d="M210,23 C218,52 222,88 218,130 C214,172 205,205 194,238" stroke-width="0.7" stroke-dasharray="7,4" opacity="0.62"/>
+          <!-- Inner sub-region boundary east -->
+          <path d="M640,24 C648,54 650,90 645,132 C640,174 628,206 615,238" stroke-width="0.7" stroke-dasharray="7,4" opacity="0.55"/>
+          <!-- Funeral Plain flat surface — horizontal sparse lines -->
+          <path d="M245,44 C305,39 368,38 430,41" stroke-width="0.7" opacity="0.62"/>
+          <path d="M240,57 C300,52 364,51 428,54" stroke-width="0.6" opacity="0.52"/>
+          <path d="M242,70 C302,65 364,64 427,67" stroke-width="0.55" opacity="0.42"/>
+          <path d="M244,83 C302,78 364,77 426,80" stroke-width="0.5" opacity="0.33"/>
+          <!-- Rocky terrain marks east of sub-boundary -->
+          <path d="M672,34 C700,30 726,29 750,32" stroke-width="0.75" opacity="0.6"/>
+          <path d="M668,47 C698,43 726,42 754,45" stroke-width="0.65" opacity="0.5"/>
+          <path d="M670,60 C698,56 726,55 754,58" stroke-width="0.55" opacity="0.4"/>
+          <!-- Sietch location markers -->
+          <circle cx="380" cy="90" r="3" fill="currentColor" opacity="0.78"/>
+          <line x1="373" y1="90" x2="387" y2="90" stroke-width="1.2" opacity="0.85"/>
+          <line x1="380" y1="83" x2="380" y2="97" stroke-width="1.2" opacity="0.85"/>
+          <circle cx="262" cy="112" r="2.5" fill="currentColor" opacity="0.65"/>
+          <circle cx="532" cy="82" r="2" fill="currentColor" opacity="0.58"/>
+          <!-- Place names -->
+          <text x="220" y="145" font-family="'Cinzel',serif" font-size="12" fill="currentColor" letter-spacing="0.14em">THE FUNERAL PLAIN</text>
+          <text x="392" y="97" font-family="'Cinzel',serif" font-size="8.5" fill="currentColor" letter-spacing="0.09em" opacity="0.8">SIETCH TABR</text>
+          <text x="270" y="120" font-family="'Cinzel',serif" font-size="7" fill="currentColor" letter-spacing="0.07em" opacity="0.6">SIETCH JACURUTU</text>
+          <text x="664" y="95" font-family="'Cinzel',serif" font-size="8" fill="currentColor" letter-spacing="0.08em" opacity="0.62">EASTERN SINK</text>
+          <!-- Scale bar -->
+          <line x1="700" y1="216" x2="860" y2="216" stroke-width="0.8" opacity="0.38"/>
+          <line x1="700" y1="211" x2="700" y2="221" stroke-width="0.8" opacity="0.38"/>
+          <line x1="860" y1="211" x2="860" y2="221" stroke-width="0.8" opacity="0.38"/>
+          <text x="752" y="232" font-family="'Cinzel',serif" font-size="6.5" fill="currentColor" opacity="0.35" letter-spacing="0.08em">400 km</text>
+          <text x="14" y="232" font-family="'Cinzel',serif" font-size="6.5" fill="currentColor" opacity="0.38" letter-spacing="0.09em">17°N · 2°E — CENTRAL ARRAKIS</text>
         </svg>
       </div>
 
@@ -900,10 +976,10 @@
               </div>
             </div>
             <ul class="rm-questions">
-              <li><span class="rm-qnum">1.</span> 1,500 years after Leto II. The Bene Gesserit are one of the last stable institutions. The Honored Matres — returning from the Scattering — are more powerful but cruder. What happens when evolved complexity meets raw force?</li>
-              <li><span class="rm-qnum">2.</span> The Tleilaxu Masters are revealed as a secret religious order who survived by appearing subservient. What does this tell us about cultural survival strategies under occupation or oppression?</li>
-              <li><span class="rm-qnum">3.</span> Duncan Idaho has been killed and revived as a ghola dozens of times across centuries. Each time he is "someone new" who eventually becomes "someone old." Is personal identity continuous, or reconstructed?</li>
-              <li><span class="rm-qnum">4.</span> Sheeana can control sandworms — but no one knows why. Herbert leaves it unexplained. Do some mysteries require resolution, or is ambiguity more honest?</li>
+              <li><span class="rm-qnum">1.</span> The Honored Matres use sexuality as a weapon; the Bene Gesserit use it as discipline and control. What is the actual difference — and does it matter?</li>
+              <li><span class="rm-qnum">2.</span> The Tleilaxu survived centuries of occupation by performing exactly what their oppressors wanted to see. Is that a survival strategy — or does it hollow something out permanently?</li>
+              <li><span class="rm-qnum">3.</span> Duncan Idaho has been killed and resurrected as a new person dozens of times. Each time, he eventually remembers who he was. Is he the same person — and does it matter?</li>
+              <li><span class="rm-qnum">4.</span> Sheeana can control sandworms and Herbert never explains why. Does every mystery in fiction deserve a resolution — or are some better left open?</li>
               <li><span class="rm-qnum">5.</span> <span class="q-badge hot">Hot Take</span> "By Book 5, Herbert has completely abandoned Dune's original themes. Heretics is essentially a different series."</li>
             </ul>
             <div class="rm-science-block">
@@ -974,10 +1050,10 @@
               </div>
             </div>
             <ul class="rm-questions">
-              <li><span class="rm-qnum">1.</span> The Bene Gesserit are transforming Chapterhouse into a new Arrakis — becoming the very institution they once observed from the outside. Is this poetic justice, necessity, or failure?</li>
-              <li><span class="rm-qnum">2.</span> Murbella — a captured Honored Matre who becomes Bene Gesserit — represents the synthesis of two enemy institutions. Can opposing ideologies genuinely merge, or does one always consume the other?</li>
-              <li><span class="rm-qnum">3.</span> Duncan Idaho and Sheeana escape in the no-ship. Herbert died before writing Book 7 — the mysterious pursuers (Daniel and Marty) are never explained. How do we engage with a deliberately open ending?</li>
-              <li><span class="rm-qnum">4.</span> The BG share consciousness through Other Memory — institutional rather than individual. What does it mean when an organisation has genuine continuity of experience across generations?</li>
+              <li><span class="rm-qnum">1.</span> At what point does an institution become the thing it was built to control — and is there any way back once that line is crossed?</li>
+              <li><span class="rm-qnum">2.</span> Murbella was the Bene Gesserit's enemy and ends up leading them. Can two opposing ideologies genuinely merge into something new — or does one always absorb the other?</li>
+              <li><span class="rm-qnum">3.</span> Herbert died before writing Book 7. The pursuers are never explained. Is an open ending a gift to readers — or an abandonment?</li>
+              <li><span class="rm-qnum">4.</span> The Bene Gesserit have genuine continuity of consciousness across generations through Other Memory. Is that an institution — or a single mind that never dies?</li>
               <li><span class="rm-qnum">5.</span> <span class="q-badge hot">Hot Take</span> "Chapterhouse is Herbert's best novel. The open ending is intentional, not accidental — and his planned Book 7 would have ruined it."</li>
             </ul>
             <div class="rm-science-block">
@@ -993,23 +1069,52 @@
       </div>
 
       <!-- MAP FRAGMENT 3 — Deep Desert / Arrakeen -->
-      <div class="rm-map-frag left">
-        <svg width="340" height="130" viewBox="0 0 340 130" fill="none" stroke="currentColor" stroke-width="0.7" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,0 A225,225 0 0,1 340,82" opacity="0.4"/>
-          <path d="M0,0 A172,172 0 0,1 280,93" opacity="0.35"/>
-          <path d="M0,0 A268,268 0 0,1 310,130" opacity="0.28"/>
-          <line x1="0" y1="0" x2="340" y2="82" opacity="0.3"/>
-          <line x1="0" y1="0" x2="280" y2="93" opacity="0.3"/>
-          <line x1="0" y1="0" x2="215" y2="130" opacity="0.25"/>
-          <path d="M75,28 C118,16 175,13 222,19 C262,25 293,44 308,70" stroke-width="1.2"/>
-          <path d="M55,66 C98,53 158,48 202,54 C242,60 278,76 298,100" stroke-width="0.75" stroke-dasharray="5,3"/>
-          <rect x="216" y="16" width="5" height="5" fill="none" stroke="currentColor" stroke-width="1" opacity="0.7"/>
-          <text x="226" y="23" font-family="'Cinzel',serif" font-size="5.5" fill="currentColor" letter-spacing="0.08em" opacity="0.8">ARRAKEEN</text>
-          <circle cx="176" cy="52" r="2" fill="currentColor" opacity="0.6"/>
-          <text x="183" y="56" font-family="'Cinzel',serif" font-size="5" fill="currentColor" letter-spacing="0.07em" opacity="0.6">SIETCH TABR</text>
-          <text x="68" y="88" font-family="'Cinzel',serif" font-size="7.5" fill="currentColor" letter-spacing="0.14em">DEEP DESERT · ARRAKIS</text>
-          <rect x="8" y="106" width="165" height="17" stroke-width="0.5" opacity="0.35"/>
-          <text x="16" y="117" font-family="'Cinzel',serif" font-size="4.8" fill="currentColor" letter-spacing="0.09em" opacity="0.5">IMPERIAL CARTOGRAPHY · YEAR 10191</text>
+      <div class="rm-map-frag">
+        <svg viewBox="0 0 900 240" fill="none" stroke="currentColor" stroke-width="0.7" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <!-- Territory fill — northern Arrakis basin -->
+          <path d="M0,62 C70,44 165,30 290,22 C418,14 548,13 670,20 C778,27 856,42 900,58 L900,240 L0,240 Z" fill="currentColor" opacity="0.07" stroke="none"/>
+          <!-- Main territory boundary -->
+          <path d="M0,62 C70,44 165,30 290,22 C418,14 548,13 670,20 C778,27 856,42 900,58" stroke-width="1.5"/>
+          <!-- Shield Wall mountain ridge — serrated line across north -->
+          <path d="M295,28 C318,22 338,17 358,14 C378,11 396,11 416,14 C436,17 455,22 475,18 C494,14 512,10 530,12 C548,14 566,19 582,16" stroke-width="1.4" opacity="0.9"/>
+          <!-- Shield Wall hatching (elevation marks) -->
+          <line x1="308" y1="28" x2="306" y2="40" stroke-width="1" opacity="0.7"/>
+          <line x1="330" y1="22" x2="328" y2="34" stroke-width="1" opacity="0.7"/>
+          <line x1="350" y1="16" x2="348" y2="28" stroke-width="1" opacity="0.7"/>
+          <line x1="372" y1="13" x2="370" y2="25" stroke-width="1" opacity="0.7"/>
+          <line x1="394" y1="12" x2="392" y2="24" stroke-width="1" opacity="0.7"/>
+          <line x1="416" y1="15" x2="414" y2="27" stroke-width="1" opacity="0.7"/>
+          <line x1="438" y1="21" x2="436" y2="33" stroke-width="1" opacity="0.7"/>
+          <line x1="457" y1="19" x2="455" y2="31" stroke-width="1" opacity="0.65"/>
+          <line x1="476" y1="15" x2="474" y2="27" stroke-width="1" opacity="0.65"/>
+          <line x1="496" y1="12" x2="494" y2="24" stroke-width="1" opacity="0.65"/>
+          <line x1="515" y1="13" x2="513" y2="25" stroke-width="1" opacity="0.65"/>
+          <line x1="534" y1="15" x2="532" y2="27" stroke-width="1" opacity="0.65"/>
+          <line x1="552" y1="18" x2="550" y2="30" stroke-width="1" opacity="0.6"/>
+          <!-- Basin topography — contour lines -->
+          <path d="M108,80 C195,62 310,52 438,50 C566,48 680,56 790,72" stroke-width="0.8" opacity="0.58"/>
+          <path d="M88,105 C178,86 296,76 426,74 C558,72 675,80 795,98" stroke-width="0.65" opacity="0.45"/>
+          <!-- Deep Desert dune marks (west) -->
+          <path d="M38,130 C58,124 80,127 100,123" stroke-width="0.75" opacity="0.62"/>
+          <path d="M32,145 C53,139 76,142 98,138" stroke-width="0.65" opacity="0.52"/>
+          <path d="M35,160 C56,154 78,157 100,153" stroke-width="0.55" opacity="0.42"/>
+          <!-- Arrakeen city marker (filled square) -->
+          <rect x="398" y="46" width="9" height="9" fill="currentColor" opacity="0.55" stroke="currentColor" stroke-width="0"/>
+          <text x="412" y="56" font-family="'Cinzel',serif" font-size="9.5" fill="currentColor" letter-spacing="0.09em">ARRAKEEN</text>
+          <!-- Carthag -->
+          <circle cx="526" cy="55" r="5" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
+          <text x="536" y="60" font-family="'Cinzel',serif" font-size="8" fill="currentColor" letter-spacing="0.07em" opacity="0.7">CARTHAG</text>
+          <!-- Sietch Tabr -->
+          <circle cx="278" cy="108" r="2.5" fill="currentColor" opacity="0.65"/>
+          <text x="288" y="114" font-family="'Cinzel',serif" font-size="8" fill="currentColor" letter-spacing="0.08em" opacity="0.68">SIETCH TABR</text>
+          <!-- Shield Wall label -->
+          <text x="328" y="9" font-family="'Cinzel',serif" font-size="7.5" fill="currentColor" letter-spacing="0.1em" opacity="0.78">SHIELD WALL</text>
+          <!-- Main region label -->
+          <text x="42" y="188" font-family="'Cinzel',serif" font-size="12" fill="currentColor" letter-spacing="0.15em">DEEP DESERT · ARRAKIS</text>
+          <!-- Imperial cartography box -->
+          <rect x="585" y="198" width="300" height="26" stroke-width="0.6" opacity="0.38"/>
+          <text x="598" y="214" font-family="'Cinzel',serif" font-size="7" fill="currentColor" letter-spacing="0.09em" opacity="0.52">IMPERIAL CARTOGRAPHY · YEAR 10,191 AG</text>
+          <text x="14" y="232" font-family="'Cinzel',serif" font-size="6.5" fill="currentColor" opacity="0.38" letter-spacing="0.09em">14°N · 3°E — NORTHERN ARRAKIS</text>
         </svg>
       </div>
 
@@ -1030,9 +1135,9 @@
               </div>
             </div>
             <ul class="rm-questions">
-              <li><span class="rm-qnum">1.</span> What story would you want to see told in the Dune universe that Herbert never wrote?</li>
-              <li><span class="rm-qnum">2.</span> How do fan fiction writers handle Herbert's dense prose style? What do they keep, and what do they abandon?</li>
-              <li><span class="rm-qnum">3.</span> Is the Dune universe "closed" — does its internal logic prevent certain kinds of stories from being told in it?</li>
+              <li><span class="rm-qnum">1.</span> What story in the Dune universe do you most want to exist — and why hasn't anyone written it yet?</li>
+              <li><span class="rm-qnum">2.</span> Herbert's prose is dense, philosophical, and slow. Can fan fiction actually carry that — or does it always drift into something lighter and faster?</li>
+              <li><span class="rm-qnum">3.</span> Is the Dune universe too constrained by its own internal logic to tell certain kinds of stories — or is that constraint exactly what makes it worth writing in?</li>
               <li><span class="rm-qnum">4.</span> <span class="q-badge hot">Hot Take</span> "The best Dune fan fiction is better than the official Brian Herbert sequels."</li>
             </ul>
           </div>
@@ -1056,6 +1161,148 @@
   <p class="spice-break-text">"Deep in the human unconscious is a pervasive need for a logical universe that makes sense. But the real universe is always one step beyond logic."</p>
   <p class="spice-break-attr">— Frank Herbert</p>
 </div>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="container">
+    <p class="section-eyebrow">The Span of Ages</p>
+    <h2 class="section-title">Timeline of the Duniverse</h2>
+    <p class="section-body" style="margin-bottom:2.5rem">25,000 years of history. The first three books happen within a single human lifetime — then time tears open.</p>
+  </div>
+  <div class="tl-outer">
+    <div class="tl-track">
+      <!-- VERTICAL LINE runs through all -->
+      <!-- PRE-HISTORY (compressed left column) -->
+      <div class="tl-col tl-prehistory">
+        <div class="tl-col-label">Pre-History</div>
+        <div class="tl-event tl-ev-minor">
+          <div class="tl-dot"></div>
+          <div class="tl-ev-year">~25,000 yrs ago</div>
+          <div class="tl-ev-text">Old Empire era. Thinking machines (Omnius/Erasmus) dominate humanity. Cymeks reign.</div>
+        </div>
+        <div class="tl-spacer"></div>
+        <div class="tl-event tl-ev-major">
+          <div class="tl-dot tl-dot-major"></div>
+          <div class="tl-ev-year">~201 BG</div>
+          <div class="tl-ev-text">Butlerian Jihad begins — humanity rises against thinking machines. "Thou shalt not make a machine in the likeness of a human mind."</div>
+        </div>
+        <div class="tl-spacer"></div>
+        <div class="tl-event tl-ev-major">
+          <div class="tl-dot tl-dot-major"></div>
+          <div class="tl-ev-year">88 BG · Year 0 AG</div>
+          <div class="tl-ev-text">Battle of Corrin. Padishah Empire founded. Spacing Guild achieves monopoly on space travel. CHOAM established.</div>
+        </div>
+      </div>
+
+      <!-- GAP MARKER 1 -->
+      <div class="tl-gap-col">
+        <div class="tl-gap-bar"></div>
+        <div class="tl-gap-label">10,191 years<br>of Empire</div>
+      </div>
+
+      <!-- BOOKS 1–3 (expanded, zoomed in) -->
+      <div class="tl-col tl-books-123">
+        <div class="tl-col-label">Books I – III <span class="tl-zoom-note">× zoomed</span></div>
+
+        <div class="tl-book-block tl-book-1">
+          <div class="tl-book-year">10,191 AG</div>
+          <div class="tl-book-badge">Dune</div>
+          <ul class="tl-book-events">
+            <li>House Atreides arrives on Arrakis</li>
+            <li>Harkonnen betrayal — Duke Leto killed</li>
+            <li>Paul escapes to the Fremen</li>
+            <li>Paul becomes Muad'Dib, leads Fremen Jihad</li>
+            <li>Shaddam IV defeated at Arrakeen</li>
+          </ul>
+        </div>
+
+        <div class="tl-book-gap">← 12 years →</div>
+
+        <div class="tl-book-block tl-book-2">
+          <div class="tl-book-year">~10,203 AG</div>
+          <div class="tl-book-badge">Dune Messiah</div>
+          <ul class="tl-book-events">
+            <li>Paul's Jihad kills 61 billion across the galaxy</li>
+            <li>Conspiracy of the Tleilaxu, Guild &amp; Bene Gesserit</li>
+            <li>Paul blinded by stone burner, walks into desert</li>
+            <li>Alia becomes regent. Leto II and Ghanima born.</li>
+          </ul>
+        </div>
+
+        <div class="tl-book-gap">← 9 years →</div>
+
+        <div class="tl-book-block tl-book-3">
+          <div class="tl-book-year">~10,218 AG</div>
+          <div class="tl-book-badge">Children of Dune</div>
+          <ul class="tl-book-events">
+            <li>Alia possessed by Baron Harkonnen's ego-memory</li>
+            <li>Preacher (Paul) returns, is killed</li>
+            <li>Leto II bonds with sandtrout — begins transformation</li>
+            <li>Leto II crowned Emperor. The Golden Path begins.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- GAP MARKER 2 -->
+      <div class="tl-gap-col tl-gap-large">
+        <div class="tl-gap-bar"></div>
+        <div class="tl-gap-label">≈ 3,500 years<br>Leto II's reign</div>
+      </div>
+
+      <!-- BOOK 4 -->
+      <div class="tl-col tl-book-4-col">
+        <div class="tl-col-label">Book IV</div>
+        <div class="tl-book-block tl-book-4">
+          <div class="tl-book-year">~13,726 AG</div>
+          <div class="tl-book-badge">God Emperor of Dune</div>
+          <ul class="tl-book-events">
+            <li>Leto II — half-man, half-sandworm — rules as God Emperor</li>
+            <li>Controls all spice; suppresses all military force</li>
+            <li>Ghola of Duncan Idaho serves as his companion</li>
+            <li>Siona Atreides conspires with Duncan to kill Leto II</li>
+            <li>Leto II assassinated — the Famine Times begin</li>
+            <li>Sandworms reborn from his body. Spice returns.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- GAP MARKER 3 -->
+      <div class="tl-gap-col tl-gap-large">
+        <div class="tl-gap-bar"></div>
+        <div class="tl-gap-label">≈ 1,500 years<br>The Scattering</div>
+      </div>
+
+      <!-- BOOKS 5–6 -->
+      <div class="tl-col tl-books-56">
+        <div class="tl-col-label">Books V – VI</div>
+
+        <div class="tl-book-block tl-book-5">
+          <div class="tl-book-year">~15,229 AG</div>
+          <div class="tl-book-badge">Heretics of Dune</div>
+          <ul class="tl-book-events">
+            <li>Humanity scattered across the galaxy returns — Honored Matres</li>
+            <li>Bene Gesserit on Chapterhouse cultivate last spice supply</li>
+            <li>Miles Teg — Supreme Bashar — awakens pre-born memories</li>
+            <li>Duncan Idaho ghola's memories restored</li>
+          </ul>
+        </div>
+
+        <div class="tl-book-gap">← ~15 years →</div>
+
+        <div class="tl-book-block tl-book-6">
+          <div class="tl-book-year">~15,244 AG</div>
+          <div class="tl-book-badge">Chapterhouse: Dune</div>
+          <ul class="tl-book-events">
+            <li>Honored Matres destroyed Rakis — Arrakis is gone</li>
+            <li>Chapterhouse becomes new Arrakis; sandworms planted</li>
+            <li>Murbella unites Bene Gesserit and Honored Matres</li>
+            <li>Duncan &amp; Sheeana flee into the unknown in a no-ship</li>
+          </ul>
+        </div>
+      </div>
+    </div><!-- /tl-track -->
+  </div><!-- /tl-outer -->
+</section>
 
 <!-- FILMS -->
 <section id="films">
